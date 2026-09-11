@@ -12,7 +12,7 @@ describe.skipIf(!host)('Auth: collegamento esplicito dei provider', () => {
   const password = 'local-test-password';
   function google() {
     const encode = (value: unknown) => Buffer.from(JSON.stringify(value)).toString('base64url');
-    const token = `${encode({ alg: 'none', typ: 'JWT' })}.${encode({ sub: 'google-user-1', email, email_verified: true, name: 'Test Google', iss: 'https://accounts.google.com', aud: 'emulator-only', iat: Math.floor(Date.now() / 1000), exp: Math.floor(Date.now() / 1000) + 3600 })}.`;
+    const token = `${encode({ alg: 'none', typ: 'JWT' })}.${encode({ sub: 'google-user-1', email, email_verified: true, name: 'Test Google', picture: 'https://lh3.googleusercontent.com/a/test-profile', iss: 'https://accounts.google.com', aud: 'emulator-only', iat: Math.floor(Date.now() / 1000), exp: Math.floor(Date.now() / 1000) + 3600 })}.`;
     return GoogleAuthProvider.credential(token);
   }
   async function policy(allowDuplicateEmails: boolean) {
@@ -46,6 +46,7 @@ describe.skipIf(!host)('Auth: collegamento esplicito dei provider', () => {
     const result = await signInWithCredential(auth, google());
     expect(result.user.uid).not.toBe(original.user.uid);
     expect(toKinUser(result.user).email).toBe(email);
+    expect(toKinUser(result.user).photoURL).toBe('https://lh3.googleusercontent.com/a/test-profile');
     await signOut(auth);
     expect((await signInWithEmailAndPassword(auth, email, password)).user.uid).toBe(original.user.uid);
   });

@@ -15,10 +15,10 @@ async function unsupported() { throw new Error('Questa fixture verifica il form,
 function AuthFormFixture() {
   const [demoRequested, setDemoRequested] = useState(false);
   const auth: AuthContextValue = {
-    user: null, ready: true, configured: true, isDemo: false, error: null,
+    user: null, ready: true, configured: true, isDemo: false, error: null, clearError: () => {},
     signIn: unsupported, signUp: unsupported, signInGoogle: unsupported,
     linkGoogle: unsupported, linkPassword: unsupported, resetPassword: unsupported,
-    signOut: unsupported, enterDemo: async () => { setDemoRequested(true); },
+    signOut: unsupported, enterDemo: async () => { setDemoRequested(true); }, updateAccountProfile: unsupported,
   };
   // A visible acknowledgement checks the callback without faking the app router.
   // Actual demo entry/navigation is covered against the built app in workout.spec.ts.

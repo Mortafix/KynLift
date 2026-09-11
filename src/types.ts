@@ -103,5 +103,5 @@ export type DataChange = {
   [K in CollectionName]: { collection: K; value: AppData[K][number] }
 }[CollectionName];
 
-export interface KinUser { uid: string; displayName: string | null; email: string | null; providers: string[] }
+export interface KinUser { uid: string; displayName: string | null; photoURL: string | null; email: string | null; providers: string[] }
 export type SyncStatus = 'local' | 'offline' | 'pending' | 'synced' | 'error';

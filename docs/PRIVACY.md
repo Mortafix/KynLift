@@ -25,7 +25,7 @@ Per i fornitori, controllare i [termini privacy di Firebase](https://firebase.go
 | Fonte | Fatto verificato |
 | --- | --- |
 | [Modello dati](../src/types.ts) | Account, esercizi, schede, sessioni, serie, energia, sonno, note, date e tombstone. |
-| [Autenticazione](../src/auth/AuthContext.tsx), [profilo](../src/auth/profile.ts) e [configurazione Firebase](../src/lib/firebase.ts) | Email/password o Google, collegamento provider, persistenza locale Auth, flag demo in sessionStorage; nessuna eliminazione utente. |
+| [Autenticazione](../src/auth/AuthContext.tsx), [profilo](../src/auth/profile.ts) e [configurazione Firebase](../src/lib/firebase.ts) | Email/password o Google, collegamento provider, nome e foto modificabili; foto Google disponibile dal provider, immagini scelte ridimensionate in JPEG e profilo privato in Firestore. Cache profilo in localStorage per UID, profilo demo in sessionStorage e persistenza locale Auth; nessuna eliminazione utente. |
 | [Feedback sessione](../src/components/SessionFeedback.tsx) e [validazione](../src/lib/workout-actions.ts) | Energia e sonno richiesti prima della conclusione; note facoltative; modifica dallo storico. |
 | [Persistenza locale](../src/data/persistence.ts) | IndexedDB per account/demo, outbox persistente, `deletedAt` con conservazione del contenuto; nessuna cancellazione al logout. |
 | [Contesto dati](../src/data/DataContext.tsx) e [sincronizzazione](../src/data/cloud.ts) | Dati demo non inviati a Firestore; account su `users/{uid}`; metadati di revisione e identificatori client. |

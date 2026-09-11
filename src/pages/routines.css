@@ -73,7 +73,7 @@
 .exercise-picker-row > svg { flex-shrink: 0; color: #ff4f93; }
 .exercise-picker-row:hover { background: #19191f; }
 .picker-no-results { padding: 14px 0; line-height: 1.5; }
-.editor-actions { display: flex; justify-content: flex-end; gap: 12px; padding: 16px 0; margin-top: 24px; background: #101014; border-top: 1px solid #303039; position: sticky; bottom: calc(var(--bottom-nav-height, 76px) + env(safe-area-inset-bottom)); z-index: 5; }
+.editor-actions { display: flex; justify-content: flex-end; gap: 12px; padding: 16px 0; margin-top: 24px; background: #101014; border-top: 1px solid #303039; position: sticky; bottom: 0; z-index: 5; }
 .editor-actions .button-primary { flex: 1; max-width: 260px; }
 .catalog-toolbar { display: flex; align-items: center; gap: 14px; }
 .catalog-search { display: flex; align-items: center; position: relative; flex: 1; min-width: 0; }

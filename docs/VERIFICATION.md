@@ -73,3 +73,26 @@ Alla conclusione sono richieste energia da 1 a 5 e ore di sonno da 0 a 24, a int
 La verifica automatica Chromium non sostituisce la nuova prova pratica su iPhone/Android, con tastiera di sistema, cambio app musicale e sospensione del browser. Le verifiche di autenticazione reali dipendono dalla configurazione e dal dominio scelti dall’utente. I precedenti test dell’autenticazione del 10 settembre non sono stati ripetuti; in questa iterazione è cambiata la destinazione dopo un accesso esplicito, mentre il ripristino automatico dell’account conserva la pagina corrente.
 
 Per usare la nuova build con account reali, pubblicare anche le regole Firestore aggiornate, come descritto in `DEPLOYMENT.md`. Nessun servizio remoto è stato modificato in questo intervento.
+
+## Correzioni smartphone e profilo — 11 settembre 2026
+
+- `npm run build:production`: TypeScript, build, configurazione client e controllo degli artefatti PWA/SEO superati.
+- `npm test`: 76 test unitari superati, inclusi profilo, cache separata per account, foto Google e indicatori dei metodi di accesso.
+- Emulatori Firebase locali: 19 test Auth/Firestore superati, inclusi isolamento del profilo e validazione di nome, foto e timestamp.
+- `npm run test:e2e`: 34 scenari Chromium superati sulla build finale. Coprono tutte le pagine mobili, safe area simulate, viewport obsoleto/ridimensionato, tastiera, editor e allenamenti; inoltre anteprima/salvataggio/rimozione foto, nome, riapertura, annullamento e immagini non valide.
+- Il ritorno rapido al profilo durante il caricamento di una pagina non ripristina più una bozza scartata: il contenuto delle rotte viene rimontato a ogni cambio pagina.
+- Verifica visiva a 402×874 con safe area simulate e a 1440×1000. Resta da verificare la PWA su iPhone reale e il flusso Google sul dominio di produzione.
+
+Prima del frontend pubblicare sia le nuove regole sia gli indici Firestore, come descritto nella sezione «Profilo modificabile» di [DEPLOYMENT.md](DEPLOYMENT.md). La build si trova in `dist/`; questo intervento non esegue il deploy.
+
+### Profilo: modifica su richiesta
+
+Il nome viene mostrato come testo; «Modifica» apre il campo e Salva/Annulla lo richiudono. La sola foto si può cambiare senza aprire il nome. I badge dei provider sono rimossi: «Collega Google» compare solo con password attiva e Google assente, mentre l’icona Google accompagna la mail quando il provider è collegato. Un errore Firestore `permission-denied` non suggerisce più erroneamente di ripetere il login. Anche da localhost, gli account reali richiedono le nuove regole pubblicate sul progetto Firebase.
+
+Build di produzione e 76 test unitari superati; ripetuti e superati i 7 test browser di profilo, accesso e layout mobile. Verificati visivamente lettura/modifica su smartphone e desktop e il salvataggio della sola foto nella demo. Nessuna regola remota pubblicata in questa verifica.
+
+### Errori locali e anteprima foto
+
+Gli errori delle operazioni Auth vengono restituiti al modulo che li ha generati, senza conservarli nel banner globale. Gli errori asincroni del collegamento sono consumati nella schermata account; quelli dei dati sono mostrati nella sezione «I tuoi dati». La modifica del nome usa solo l’icona matita. La foto apre il dialog condiviso con anteprima e comandi «Cambia»/«Rimuovi»; le modifiche vengono confermate con «Salva profilo» e si possono annullare.
+
+Build di produzione, 76 test unitari e tutti i 35 scenari browser superati. Il nuovo scenario forza un errore di validazione nel salvataggio e verifica che non compaia nell’intestazione né sulle altre pagine. Verificati anche errori immagine confinati al dialog, chiusura con Escape, ritorno del focus e layout mobile/desktop. Nessun deploy eseguito.

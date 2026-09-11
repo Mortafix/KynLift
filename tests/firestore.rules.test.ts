@@ -30,6 +30,37 @@ describe.skipIf(!enabled)('Firestore: isolamento e validazione', () => {
     await assertFails(getDoc(doc(anon, 'users/alice/exercises/squat')));
     await assertFails(setDoc(doc(anon, 'users/alice/exercises/squat'), exercise));
   });
+  it('isola il profilo privato e consente foto Google, foto caricate e rimozione della foto', async () => {
+    const alice = env.authenticatedContext('alice').firestore();
+    const bob = env.authenticatedContext('bob').firestore();
+    const anon = env.unauthenticatedContext().firestore();
+    const ref = doc(alice, 'users/alice/profile/main');
+    const profile = { displayName: 'Alice', photoURL: 'https://lh3.googleusercontent.com/a/avatar', updatedAt: serverTimestamp() };
+    await assertSucceeds(setDoc(ref, profile));
+    expect((await assertSucceeds(getDoc(ref))).data()?.displayName).toBe('Alice');
+    await assertFails(getDoc(doc(bob, 'users/alice/profile/main')));
+    await assertFails(getDoc(doc(anon, 'users/alice/profile/main')));
+    await assertFails(setDoc(doc(bob, 'users/alice/profile/main'), profile));
+    await assertFails(setDoc(doc(anon, 'users/alice/profile/main'), profile));
+    await assertFails(getDocs(collection(alice, 'users/alice/profile')));
+    await assertFails(setDoc(doc(alice, 'users/alice/profile/other'), profile));
+    await assertSucceeds(setDoc(ref, { ...profile, displayName: 'Nome scelto', photoURL: 'data:image/jpeg;base64,/9j/4AAQSkZJRg==' }));
+    await assertSucceeds(setDoc(ref, { ...profile, photoURL: null }));
+    await assertFails(deleteDoc(ref));
+  });
+  it('valida nome e foto del profilo e richiede la data server senza campi extra', async () => {
+    const db = env.authenticatedContext('alice').firestore();
+    const ref = doc(db, 'users/alice/profile/main');
+    const profile = { displayName: 'Alice', photoURL: null, updatedAt: serverTimestamp() };
+    await assertSucceeds(setDoc(ref, { ...profile, displayName: 'x'.repeat(80) }));
+    for (const displayName of ['', '   ', 'x'.repeat(81), 123]) await assertFails(setDoc(ref, { ...profile, displayName }));
+    for (const photoURL of ['javascript:alert(1)', 'data:image/svg+xml,<svg/>', 'http://example.com/photo', 'data:image/jpeg;base64,' + 'A'.repeat(180000), 'https://example.com/' + 'x'.repeat(2048), 123]) {
+      await assertFails(setDoc(ref, { ...profile, photoURL }));
+    }
+    await assertFails(setDoc(ref, { ...profile, updatedAt: Timestamp.fromMillis(1) }));
+    await assertFails(setDoc(ref, { ...profile, role: 'admin' }));
+    await assertFails(setDoc(ref, { displayName: 'Alice', updatedAt: serverTimestamp() }));
+  });
   it('rifiuta campi inattesi, identificatori diversi e collezioni non previste', async () => {
     const db = env.authenticatedContext('alice').firestore();
     await assertFails(setDoc(doc(db, 'users/alice/exercises/other'), exercise));

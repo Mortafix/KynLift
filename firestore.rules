@@ -75,6 +75,22 @@ service cloud.firestore {
         && ((kind == 'exercises' && exercise()) || (kind == 'routines' && routine())
           || (kind == 'sessions' && session()) || (kind == 'sets' && setEntry()));
     }
+    function accountProfile() {
+      let value = request.resource.data;
+      return value.keys().hasAll(['displayName', 'photoURL', 'updatedAt'])
+        && value.keys().hasOnly(['displayName', 'photoURL', 'updatedAt'])
+        && value.displayName is string && value.displayName.size() > 0 && value.displayName.size() <= 80
+        && value.displayName.matches('.*[^\\s].*')
+        && (value.photoURL == null || (value.photoURL is string
+          && ((value.photoURL.size() <= 180000 && value.photoURL.matches('data:image/jpeg;base64,[A-Za-z0-9+/]+={0,2}'))
+            || (value.photoURL.size() <= 2048 && value.photoURL.matches('https://[^\\s]+')))))
+        && value.updatedAt == request.time;
+    }
+    match /users/{uid}/profile/main {
+      allow get: if owner(uid);
+      allow create, update: if owner(uid) && accountProfile();
+      allow delete: if false;
+    }
     match /users/{uid}/{kind}/{id} {
       allow read: if owner(uid) && kind in ['exercises', 'routines', 'sessions', 'sets'];
       allow create: if owner(uid) && valid(kind, id);

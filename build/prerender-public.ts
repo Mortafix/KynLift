@@ -14,10 +14,10 @@ async function unavailable() {
 
 export function renderPublicPage({ configured }: PublicPrerenderOptions): string {
   const auth: AuthContextValue = {
-    user: null, ready: false, configured, isDemo: false, error: null,
+    user: null, ready: false, configured, isDemo: false, error: null, clearError: () => {},
     signIn: unavailable, signUp: unavailable, signInGoogle: unavailable,
     linkGoogle: unavailable, linkPassword: unavailable, resetPassword: unavailable,
-    signOut: unavailable, enterDemo: unavailable,
+    signOut: unavailable, enterDemo: unavailable, updateAccountProfile: unavailable,
   };
   return renderToStaticMarkup(createElement(AuthContext.Provider, { value: auth }, createElement(AuthPage)));
 }

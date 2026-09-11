@@ -1,11 +1,9 @@
 import { useEffect, useRef, useState, type FormEvent } from 'react';
 import { ArrowRight, Check, ArrowLeft, LoaderCircle } from 'lucide-react';
 import { Brand, Mark } from '../components/Brand';
+import { GoogleMark } from '../components/GoogleMark';
 import { useAuth } from '../auth/context';
 
-function GoogleMark() {
-  return <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M21.6 12.23c0-.71-.06-1.39-.18-2.05H12v3.88h5.38a4.6 4.6 0 0 1-2 3.02v2.51h3.24c1.89-1.74 2.98-4.31 2.98-7.36ZM12 22c2.7 0 4.96-.9 6.61-2.42l-3.24-2.51c-.9.6-2.04.97-3.37.97-2.6 0-4.81-1.76-5.6-4.13H3.06v2.59A10 10 0 0 0 12 22ZM6.4 13.9a6 6 0 0 1 0-3.8V7.51H3.06a10 10 0 0 0 0 8.98l3.34-2.59ZM12 5.96c1.47 0 2.78.51 3.82 1.51l2.86-2.86A9.61 9.61 0 0 0 12 2a10 10 0 0 0-8.94 5.51L6.4 10.1A5.98 5.98 0 0 1 12 5.96Z" /></svg>;
-}
 
 function revealInPanel(panel: HTMLElement, element: HTMLElement) {
   const container = panel.getBoundingClientRect();
@@ -29,11 +27,23 @@ export function AuthPage() {
   useEffect(() => {
     const viewport = window.visualViewport;
     let frame = 0;
+    let keyboardOpen = false;
     const update = () => {
       const height = viewport?.height ?? window.innerHeight;
       screen.current?.style.setProperty('--auth-viewport-height', `${height}px`);
       screen.current?.style.setProperty('--auth-viewport-top', `${viewport?.offsetTop ?? 0}px`);
-      if (screen.current) screen.current.dataset.compact = String(height < 680 || window.innerWidth < 760 && height < 800);
+      const focused = document.activeElement;
+      const editing = focused instanceof HTMLInputElement || focused instanceof HTMLTextAreaElement;
+      const reduced = window.innerWidth < 760 && (window.innerHeight < 600 || height < window.innerHeight - 120);
+      keyboardOpen = reduced && (editing || keyboardOpen);
+      if (screen.current) {
+        // Use native dynamic viewport sizing outside keyboard interactions: Safari
+        // can briefly report a stale visualViewport when restoring an installed app.
+        screen.current.dataset.keyboardOpen = String(keyboardOpen);
+        const style = getComputedStyle(screen.current);
+        const availableHeight = screen.current.clientHeight - parseFloat(style.paddingTop) - parseFloat(style.paddingBottom);
+        screen.current.dataset.compact = String(availableHeight < 680 || window.innerWidth < 760 && availableHeight < 800);
+      }
       cancelAnimationFrame(frame);
       frame = requestAnimationFrame(() => {
         const panel = formPanel.current;
@@ -45,13 +55,17 @@ export function AuthPage() {
     viewport?.addEventListener('resize', update);
     viewport?.addEventListener('scroll', update);
     window.addEventListener('resize', update);
+    window.addEventListener('pageshow', update);
     document.addEventListener('focusin', update);
+    document.addEventListener('focusout', update);
     return () => {
       cancelAnimationFrame(frame);
       viewport?.removeEventListener('resize', update);
       viewport?.removeEventListener('scroll', update);
       window.removeEventListener('resize', update);
+      window.removeEventListener('pageshow', update);
       document.removeEventListener('focusin', update);
+      document.removeEventListener('focusout', update);
     };
   }, []);
   useEffect(() => {
@@ -64,7 +78,7 @@ export function AuthPage() {
     try { await action(); } catch (failure) { setError(failure instanceof Error ? failure.message : 'Non è stato possibile accedere. Riprova.'); }
     finally { setBusy(false); }
   }
-  function changeMode(next: typeof mode) { setMode(next); setError(''); setNotice(''); }
+  function changeMode(next: typeof mode) { setMode(next); setError(''); setNotice(''); auth.clearError(); }
   function submit(event: FormEvent) {
     event.preventDefault();
     if (unavailable) return;

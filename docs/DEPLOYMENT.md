@@ -76,6 +76,7 @@ Controlla questi scenari su Safari/iPhone e Chrome/Android, anche dopo l’insta
 | Registrazione email e nuovo accesso | Il profilo ritrova il catalogo; nessuno storico demo appare nell’account reale. |
 | Accesso Google e ritorno dal redirect | L’app recupera la sessione sul dominio configurato. |
 | Collegamento Google/password | L’UID e lo storico rimangono gli stessi; account distinti non vengono fusi automaticamente. |
+| Nome e foto profilo | L’accesso Google mostra la foto disponibile; nome e foto modificati nel profilo restano dopo riapertura, nuovo accesso Google e accesso da un secondo dispositivo. |
 | Cambio account sullo stesso telefono | Nessun dato dell’account precedente compare nel nuovo profilo. |
 | Modalità aereo dopo accesso e caricamento | Schede e storico già disponibili restano consultabili; le modifiche vengono salvate localmente. |
 | Chiusura e riapertura offline | L’allenamento e le serie salvate sono recuperabili. |
@@ -143,3 +144,11 @@ Pubblica le regole `firestore.rules` aggiornate **prima** di distribuire questa 
 Il nuovo form richiede energia e sonno prima di concludere una sessione con serie salvate. Le medie escludono i dati mancanti e includono zero ore soltanto se esplicitamente registrato. Non è prevista una migrazione che ricostruisca questi valori per il passato.
 
 Se devi ripristinare una build precedente, conserva regole che accettino anche i nuovi campi finché esistono sessioni che li contengono o modifiche in coda. Ripristinare le vecchie regole potrebbe impedire la sincronizzazione delle sessioni aggiornate. La correzione dallo storico salva l’intero documento della sessione: la politica esistente di ultima scrittura fra dispositivi vale anche per energia, sonno e note.
+
+## Profilo modificabile — 11 settembre 2026
+
+Prima di distribuire il frontend, pubblica anche `firestore.rules` e `firestore.indexes.json`: il profilo personale usa il documento privato `users/{uid}/profile/main`, accessibile solo al proprietario, con `displayName`, `photoURL` e `updatedAt` assegnato dal server. I vecchi account funzionano senza migrazione: fino alla prima modifica l’app mostra nome e foto forniti da Firebase Authentication, compresa la foto Google disponibile.
+
+Nome e foto vengono salvati insieme e prevalgono sui dati del provider anche ai successivi accessi. Il nome accetta da 1 a 80 caratteri. Le immagini caricate sono ridimensionate dal browser in JPEG e conservate nel documento, con un limite di 180.000 caratteri per la data URL; le foto predefinite Google sono URL HTTPS fino a 2048 caratteri. Il campo foto è escluso dagli indici. Questa funzione usa il database esistente e non richiede Firebase Storage.
+
+Il salvataggio del profilo richiede la connessione e viene confermato dopo la transazione Firestore; non usa la coda offline degli allenamenti. Una cache in localStorage, separata per UID, mantiene l’ultimo profilo disponibile sul dispositivo. Le personalizzazioni della demo rimangono esclusivamente in sessionStorage e non vengono inviate a Firebase. Il logout conserva la cache degli account, come avviene per gli allenamenti locali.

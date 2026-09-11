@@ -1,4 +1,6 @@
 {
   "indexes": [],
-  "fieldOverrides": []
+  "fieldOverrides": [
+    { "collectionGroup": "profile", "fieldPath": "photoURL", "indexes": [] }
+  ]
 }

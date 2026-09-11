@@ -4,6 +4,7 @@ import { useRegisterSW } from 'virtual:pwa-register/react';
 import { AuthProvider, useAuth } from './auth/AuthContext';
 import { DataProvider, useData } from './data/DataContext';
 import { Brand } from './components/Brand';
+import { Avatar } from './components/Avatar';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import { ConfirmProvider, useConfirm } from './components/ConfirmDialog';
 import { AuthPage } from './pages/Auth';
@@ -39,7 +40,7 @@ function AccountApp() {
   const auth = useAuth();
   const confirm = useConfirm();
   const navigating = useRef(false);
-  const { data, loading, error: dataError, save, syncStatus } = useData();
+  const { data, loading, save, syncStatus } = useData();
   const [path, setPath] = useState(location.pathname === '/' ? '/allenamento' : location.pathname);
   const [error, setError] = useState('');
   const [keyboardOpen, setKeyboardOpen] = useState(false);
@@ -53,7 +54,7 @@ function AccountApp() {
   const { needRefresh: [needRefresh, setNeedRefresh], updateServiceWorker } = useRegisterSW();
   const activeSessions = data.sessions.filter((session) => session.status === 'active').sort((a, b) => b.startedAt - a.startedAt);
   const active = activeSessions[0];
-  const selectedTab = path.startsWith('/schede') || path.startsWith('/catalogo') ? '/schede' : path.startsWith('/progressi') || path.startsWith('/storico') ? '/progressi' : '/allenamento';
+  const selectedTab = path === '/impostazioni' ? null : path.startsWith('/schede') || path.startsWith('/catalogo') ? '/schede' : path.startsWith('/progressi') || path.startsWith('/storico') ? '/progressi' : '/allenamento';
   const reportDirty = useCallback((value: boolean) => { dirty.current = value; }, []);
   const canLeave = useCallback(async () => !dirty.current || await confirm({ title: 'Lasciare la schermata?', message: 'Ci sono modifiche non salvate. Vuoi continuare senza salvarle?', confirmLabel: 'Lascia schermata', cancelLabel: 'Resta qui' }), [confirm]);
 
@@ -72,12 +73,16 @@ function AccountApp() {
     };
     update();
     viewport?.addEventListener('resize', update);
+    viewport?.addEventListener('scroll', update);
     window.addEventListener('resize', update);
+    window.addEventListener('pageshow', update);
     document.addEventListener('focusin', update);
     document.addEventListener('focusout', update);
     return () => {
       viewport?.removeEventListener('resize', update);
+      viewport?.removeEventListener('scroll', update);
       window.removeEventListener('resize', update);
+      window.removeEventListener('pageshow', update);
       document.removeEventListener('focusin', update);
       document.removeEventListener('focusout', update);
     };
@@ -128,7 +133,7 @@ function AccountApp() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [canLeave]);
 
-  useEffect(() => { window.scrollTo(0, 0); main.current?.focus({ preventScroll: true }); }, [path]);
+  useEffect(() => { window.scrollTo(0, 0); main.current?.scrollTo(0, 0); main.current?.focus({ preventScroll: true }); }, [path]);
   useEffect(() => { updatePageMetadata(path, true); }, [path]);
   const navigate = useCallback(async (next: string, replace = false) => {
     if (next === currentPath.current || navigating.current) return;
@@ -171,7 +176,7 @@ function AccountApp() {
     if (path === '/schede') return <Routines onCatalog={() => navigate('/catalogo')} onDirtyChange={reportDirty} />;
     if (path === '/catalogo') return <Catalog onBack={() => navigate('/schede')} onDirtyChange={reportDirty} />;
     if (path === '/progressi') return <Progress onSession={(id) => navigate(`/storico/${encodeURIComponent(id)}`)} />;
-    if (path === '/impostazioni') return <Settings onBack={() => navigate('/allenamento')} onReset={() => navigate('/allenamento')} />;
+    if (path === '/impostazioni') return <Settings onReset={() => navigate('/allenamento')} onDirtyChange={reportDirty} />;
     if (path.startsWith('/allenamento/scheda/')) {
       let id = ''; try { id = decodeURIComponent(path.slice('/allenamento/scheda/'.length)); } catch { /* A malformed URL shows the missing-routine state. */ }
       const routine = data.routines.find((item) => item.id === id);
@@ -189,14 +194,14 @@ function AccountApp() {
 
   return <div className={`app-shell${keyboardOpen ? ' keyboard-open' : ''}`}>
     <a className="skip-link" href="#main-content">Vai al contenuto</a>
-    <header className="app-header"><button type="button" className="brand-button" onClick={() => navigate('/allenamento')} aria-label="Kynlift, vai all’allenamento"><Brand /></button><nav className="desktop-nav" aria-label="Navigazione principale">{tabs.map(({ path: destination, label, Icon }) => <button key={destination} type="button" className={selectedTab === destination ? 'active' : ''} aria-current={selectedTab === destination ? 'page' : undefined} onClick={() => navigate(destination)}><Icon size={19} />{label}</button>)}</nav><div className="header-account"><SyncIndicator status={syncStatus} demo={auth.isDemo} /><button type="button" className="avatar" onClick={() => navigate('/impostazioni')} aria-label="Apri impostazioni account">{auth.user?.displayName?.slice(0, 1).toUpperCase() ?? 'K'}</button></div></header>
+    <header className="app-header"><button type="button" className="brand-button" onClick={() => navigate('/allenamento')} aria-label="Kynlift, vai all’allenamento"><Brand /></button><nav className="desktop-nav" aria-label="Navigazione principale">{tabs.map(({ path: destination, label, Icon }) => <button key={destination} type="button" className={selectedTab === destination ? 'active' : ''} aria-current={selectedTab === destination ? 'page' : undefined} onClick={() => navigate(destination)}><Icon size={19} />{label}</button>)}</nav><div className="header-account"><SyncIndicator status={syncStatus} demo={auth.isDemo} /><button type="button" className="avatar" onClick={() => navigate('/impostazioni')} aria-label="Apri impostazioni account"><Avatar user={auth.user} /></button></div></header>
     <div className="app-messages">
       {auth.isDemo && <p className="demo-banner">Stai provando Kynlift con dati di esempio.<button type="button" onClick={() => navigate('/impostazioni')}>Gestisci demo</button></p>}
-      {(error || dataError || auth.error) && <div className="app-error error-message" role="alert"><AlertCircle size={18} /><span>{error || dataError || auth.error}</span></div>}
+      {error && <div className="app-error error-message" role="alert"><AlertCircle size={18} /><span>{error}</span></div>}
       {activeSessions.length > 1 && <p role="alert" className="error-message">Ci sono più allenamenti aperti su dispositivi diversi. Termina o annulla quello più recente; poi potrai recuperare il precedente. Usa Kynlift su un dispositivo alla volta.</p>}
       {needRefresh && <div className="update-banner" role="status"><span>È pronta una nuova versione di Kynlift.</span><button type="button" className="text-button" onClick={async () => { if (await canLeave()) void updateServiceWorker(true); }}>Aggiorna</button><button type="button" className="text-button" onClick={() => setNeedRefresh(false)}>Più tardi</button></div>}
     </div>
-    <main id="main-content" ref={main} tabIndex={-1}><Suspense fallback={<Loading />}>{screen()}</Suspense></main>
+    <main id="main-content" ref={main} tabIndex={-1}><Suspense key={path} fallback={<Loading />}>{screen()}</Suspense></main>
     {active && path !== '/allenamento/sessione' && path !== '/allenamento' && <button type="button" className="resume-strip" disabled={resuming} onClick={() => void resumeActive()}><span className="live-dot" /><span>{active.pausedAt != null ? 'Allenamento in pausa' : 'Allenamento in corso'}</span><strong>Riprendi</strong></button>}
     <nav className="bottom-nav" aria-label="Navigazione principale mobile">{tabs.map(({ path: destination, label, Icon }) => <button type="button" key={destination} className={selectedTab === destination ? 'active' : ''} aria-current={selectedTab === destination ? 'page' : undefined} onClick={() => navigate(destination)}><Icon size={23} /><span>{label}</span></button>)}</nav>
   </div>;

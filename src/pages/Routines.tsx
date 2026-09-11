@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { ArrowDown, ArrowLeft, ArrowUp, Check, ChevronDown, Copy, Dumbbell, LoaderCircle, Pencil, Plus, Search, Trash2, X } from 'lucide-react';
 import { useData } from '../data/DataContext';
 import { useConfirm } from '../components/ConfirmDialog';
+import { scrollPageToTop } from '../lib/scroll';
 import type { Exercise, MuscleGroup, Routine, RoutineExercise } from '../types';
 import './routines.css';
 
@@ -47,7 +48,7 @@ export function Routines({ onCatalog, onDirtyChange }: RoutinesProps) {
     setDraft(routine ? fromRoutine(routine) : { id: crypto.randomUUID(), createdAt: Date.now(), name: '', description: '', exercises: [] });
     setExpanded(routine?.exercises[0]?.id ?? null);
     setDirty(false); setError(''); setNotice(''); setShowPicker(false); setQuery(''); setMuscle('');
-    window.scrollTo({ top: 0 });
+    scrollPageToTop();
   }
   function patchDraft(patch: Partial<RoutineDraft>) { setDraft((current) => current ? { ...current, ...patch } : null); setDirty(true); setError(''); }
   function patchExercise(id: string, patch: Partial<ExerciseDraft>) {
@@ -57,7 +58,7 @@ export function Routines({ onCatalog, onDirtyChange }: RoutinesProps) {
   async function closeEditor() {
     if (dirty && !await confirm('Uscire senza salvare le modifiche alla scheda?')) return;
     setDraft(null); setDirty(false); setError(''); setShowPicker(false);
-    window.scrollTo({ top: 0 });
+    scrollPageToTop();
   }
   function addExercise(exercise: Exercise) {
     if (!draft) return;
@@ -93,7 +94,7 @@ export function Routines({ onCatalog, onDirtyChange }: RoutinesProps) {
     const values: RoutineExercise[] = draft.exercises.map((item) => ({ ...item, sets: numberOf(item.sets), repsMin: numberOf(item.repsMin), repsMax: numberOf(item.repsMax), rir: item.rir.trim() ? numberOf(item.rir) : null, restSeconds: numberOf(item.restSeconds), note: item.note.trim() }));
     const routine: Routine = { id: draft.id, createdAt: draft.createdAt, updatedAt: Date.now(), name: draft.name.trim(), description: draft.description.trim(), exercises: values };
     setBusy(true); setError('');
-    try { await save([{ collection: 'routines', value: routine }]); setDraft(null); setDirty(false); setNotice('Scheda salvata sul dispositivo.'); window.scrollTo({ top: 0 }); }
+    try { await save([{ collection: 'routines', value: routine }]); setDraft(null); setDirty(false); setNotice('Scheda salvata sul dispositivo.'); scrollPageToTop(); }
     catch (cause) { setError(cause instanceof Error ? cause.message : 'Non è stato possibile salvare la scheda. Le modifiche sono ancora qui: riprova.'); }
     finally { setBusy(false); }
   }

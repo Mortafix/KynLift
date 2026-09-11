@@ -1,0 +1,21 @@
+.profile-form { display: flex; flex-direction: column; align-items: flex-start; gap: 20px; max-width: 480px; margin-bottom: 28px; }
+.profile-form .account-identity { width: 100%; margin-bottom: 0; align-items: center; }
+.profile-form .avatar-large { width: 80px; height: 80px; font-size: 30px; }
+.profile-photo-actions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin-top: 20px; }
+.profile-photo-actions .button { min-width: 0; padding-inline: 12px; }
+.profile-photo-preview { display: flex; align-items: center; justify-content: center; width: min(100%, 280px); aspect-ratio: 1; margin-inline: auto; border-radius: 14px; background: var(--surface-raised); color: var(--text-secondary); font-size: 80px; overflow: hidden; }
+.profile-photo-dialog .error-message { margin: 16px 0 0; }
+.profile-form > .field { width: 100%; }
+.profile-save-actions { display: flex; flex-wrap: wrap; gap: 12px; }
+.profile-form .error-message, .profile-form .success-message { margin: 0; width: 100%; }
+.profile-name { display: flex; align-items: center; gap: 8px; }
+.profile-name strong { flex: 1; min-width: 0; }
+.profile-name .icon-button { color: var(--accent); }
+.profile-email { display: flex; align-items: center; gap: 8px; }
+.profile-email > span:last-child { min-width: 0; }
+.profile-google { display: inline-flex; flex-shrink: 0; color: var(--text); }
+.profile-google svg { width: 16px; height: 16px; }
+@media (max-width: 359px) {
+  .profile-form .account-identity { gap: 12px; }
+  .profile-form .avatar-large { width: 64px; height: 64px; }
+}

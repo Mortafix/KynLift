@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { ArrowLeft, Check, Dumbbell, LoaderCircle, Pencil, Plus, Search, Trash2 } from 'lucide-react';
 import { useData } from '../data/DataContext';
 import { useConfirm } from '../components/ConfirmDialog';
+import { scrollPageToTop } from '../lib/scroll';
 import type { Exercise, LoadMode, MuscleGroup } from '../types';
 import './routines.css';
 
@@ -36,12 +37,12 @@ export function Catalog({ onBack, onDirtyChange }: CatalogProps) {
 
   function edit(exercise?: Exercise) {
     setDraft(exercise ? { ...exercise, increment: String(exercise.increment).replace('.', ',') } : { id: crypto.randomUUID(), createdAt: Date.now(), name: '', equipment: '', muscleGroup: 'Altro', loadMode: 'total', loadMultiplier: 1, unilateral: false, increment: '2,5' });
-    setDirty(false); setError(''); setNotice(''); window.scrollTo({ top: 0 });
+    setDirty(false); setError(''); setNotice(''); scrollPageToTop();
   }
   function patch(patch: Partial<ExerciseDraft>) { setDraft((current) => current ? { ...current, ...patch } : null); setDirty(true); setError(''); }
   async function closeEditor() {
     if (dirty && !await confirm('Uscire senza salvare le modifiche all’esercizio?')) return;
-    setDraft(null); setDirty(false); setError(''); window.scrollTo({ top: 0 });
+    setDraft(null); setDirty(false); setError(''); scrollPageToTop();
   }
   async function saveExercise() {
     if (!draft || busy) return;
@@ -53,7 +54,7 @@ export function Catalog({ onBack, onDirtyChange }: CatalogProps) {
     if (duplicate) { setError('Esiste già un esercizio con questo nome e questa attrezzatura. Modifica quello esistente o distingui il nome della variante.'); return; }
     const exercise: Exercise = { id: draft.id, createdAt: draft.createdAt, updatedAt: Date.now(), name: draft.name.trim(), equipment: draft.equipment.trim(), muscleGroup: draft.muscleGroup, loadMode: draft.loadMode, loadMultiplier: draft.loadMode === 'per-hand' ? draft.loadMultiplier : 1, unilateral: draft.unilateral, increment };
     setBusy(true); setError('');
-    try { await save([{ collection: 'exercises', value: exercise }]); setDraft(null); setDirty(false); setNotice('Esercizio salvato sul dispositivo.'); window.scrollTo({ top: 0 }); }
+    try { await save([{ collection: 'exercises', value: exercise }]); setDraft(null); setDirty(false); setNotice('Esercizio salvato sul dispositivo.'); scrollPageToTop(); }
     catch (cause) { setError(cause instanceof Error ? cause.message : 'Non è stato possibile salvare l’esercizio. Le modifiche sono ancora qui: riprova.'); }
     finally { setBusy(false); }
   }

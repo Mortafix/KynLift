@@ -14,14 +14,14 @@ Kynlift è un diario di allenamento. Consente di organizzare esercizi e schede, 
 
 | Dati | Utilizzo nell’app |
 | --- | --- |
-| Nome, indirizzo email, identificativo dell’account e metodi di accesso collegati | Creazione dell’account, accesso, riconoscimento del proprio spazio e collegamento esplicito di Google ed email/password. |
+| Nome, foto profilo facoltativa, indirizzo email, identificativo dell’account e metodi di accesso collegati | Creazione dell’account, accesso, riconoscimento del proprio spazio e collegamento esplicito di Google ed email/password. Nome e foto possono essere modificati dal profilo. |
 | Password, se scegli email/password | Autenticazione tramite Firebase Authentication. Il modello dei dati degli allenamenti non memorizza la password. |
 | Esercizi, attrezzatura, gruppi muscolari, schede, obiettivi e note | Organizzazione dell’allenamento e ripresa delle proprie impostazioni. |
 | Carichi, ripetizioni, RIR, eventuali valori distinti per lato, date, tempi, recuperi e stato delle sessioni | Registrazione delle serie, ripresa dell’allenamento e confronto delle prestazioni. I carichi sono quelli utilizzati negli esercizi; non è previsto un campo dedicato al peso corporeo. |
 | Energia percepita, ore di sonno e note sulla sessione | Riepilogo dell’allenamento e consultazione delle informazioni nello storico e nei progressi. |
 | Identificatori dei documenti e dell’installazione, revisioni, sequenze e date di sincronizzazione | Associazione dei dati al proprio account, salvataggio locale e sincronizzazione delle modifiche. |
 
-L’accesso con Google rende disponibili all’app nome, email, identificativo e informazioni sul metodo di accesso. Kynlift non richiede autorizzazioni per leggere Gmail, contatti o calendario.
+L’accesso con Google rende disponibili all’app nome, foto profilo se presente, email, identificativo e informazioni sul metodo di accesso. La foto predefinita viene caricata dall’indirizzo HTTPS fornito da Google. Kynlift non richiede autorizzazioni per leggere Gmail, contatti o calendario.
 
 Nella versione esaminata, energia e ore di sonno sono richieste per completare un nuovo allenamento; le note aggiuntive sono facoltative. L’energia usa una scala da 1 a 5 e il sonno può essere indicato a intervalli di mezz’ora. Questi valori possono essere modificati dallo storico. Le registrazioni precedenti che non li contengono restano leggibili.
 
@@ -30,6 +30,8 @@ Nella versione esaminata, energia e ore di sonno sono richieste per completare u
 I dati di allenamento vengono salvati nel browser tramite IndexedDB, in spazi distinti per ciascun account e per la demo. Le modifiche in attesa di invio sono conservate in una coda locale. Per un account reale, quando le condizioni di connessione e autenticazione lo consentono, vengono sincronizzate con Cloud Firestore.
 
 L’autenticazione usa la persistenza locale del servizio Firebase Authentication. La scelta di usare la demo viene conservata anche nella memoria di sessione del browser. La PWA conserva copie delle risorse dell’app tramite il service worker per consentirne l’apertura anche senza rete.
+
+Il nome e la foto personalizzati vengono salvati insieme in un documento privato Cloud Firestore quando il dispositivo è connesso. Le immagini scelte vengono ridimensionate dal browser in JPEG prima dell’invio; il file originale non viene caricato. L’ultimo profilo confermato viene conservato anche in localStorage, separatamente per ciascun account. La demo conserva nome e foto personalizzati nella memoria di sessione e non li invia a Firebase. Uscire dall’account mantiene anche la copia locale del profilo.
 
 Uscire dall’account non cancella gli allenamenti già presenti sul dispositivo. La rimozione dei dati del sito dalle impostazioni del browser riguarda le copie locali e non elimina le copie associate all’account sul server; può anche rimuovere modifiche non ancora sincronizzate.
 
