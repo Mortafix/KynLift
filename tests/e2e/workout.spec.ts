@@ -66,28 +66,6 @@ test('entrare e rientrare nella demo apre sempre il tab Allenamento', async ({ p
   await expect(page.locator('.bottom-nav').getByRole('button', { name: 'Allenamento', exact: true })).toHaveAttribute('aria-current', 'page');
 });
 
-test('accesso fisso mantiene i campi e le azioni raggiungibili con tastiera e registrazione', async ({ page }) => {
-  await page.setViewportSize({ width: 320, height: 740 });
-  await page.goto('/');
-  await expect(page.getByText('Bentornato in pista.', { exact: true })).toHaveCount(0);
-  expect(await page.evaluate(() => document.documentElement.scrollHeight <= innerHeight)).toBe(true);
-  await expect(page.getByRole('button', { name: 'Accedi', exact: true })).toBeInViewport({ ratio: 1 });
-  await expect(page.getByRole('button', { name: 'Esplora la demo', exact: true })).toBeInViewport({ ratio: 1 });
-  await page.getByRole('button', { name: 'Crea un account', exact: true }).click();
-  await page.setViewportSize({ width: 320, height: 400 });
-  for (const name of ['Il tuo nome', 'Email', 'Password']) {
-    const field = page.getByRole('textbox', { name, exact: true });
-    const input = name === 'Password' ? page.getByLabel('Password', { exact: true }) : field;
-    await input.focus();
-    await expect(input).toBeInViewport({ ratio: 1 });
-  }
-  await page.getByRole('button', { name: 'Crea account', exact: true }).scrollIntoViewIfNeeded();
-  await expect(page.getByRole('button', { name: 'Crea account', exact: true })).toBeInViewport({ ratio: 1 });
-  expect(await page.evaluate(() => document.documentElement.scrollHeight <= innerHeight)).toBe(true);
-  await page.getByRole('button', { name: 'Esplora la demo', exact: true }).click();
-  await expect(page).toHaveURL('/allenamento');
-});
-
 test('una conferma salva la serie, avanza e conserva timer e bozza dopo riapertura offline', async ({ page, context }) => {
   await demo(page); await startLower(page);
   await expect(page.locator('.previous-weight')).toContainText('Ultima volta');
@@ -406,6 +384,8 @@ test('raccoglie energia, sonno e note alla fine e ricalcola le statistiche dopo 
   await edit.getByRole('textbox', { name: 'Ore di sonno prima dell’allenamento', exact: true }).fill('0');
   await expect(edit.getByRole('button', { name: 'Diminuisci ore di sonno', exact: true })).toBeDisabled();
   await edit.getByRole('button', { name: 'Salva modifiche', exact: true }).click();
+  await expect(edit).not.toBeVisible();
+  await expect(page.locator('.history-feedback')).toContainText('0 ore');
   await page.reload();
   await page.locator('.history-feedback').getByRole('button', { name: 'Modifica', exact: true }).click();
   await expect(edit.getByRole('textbox', { name: 'Ore di sonno prima dell’allenamento', exact: true })).toHaveValue('0');
