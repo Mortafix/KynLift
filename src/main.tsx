@@ -10,5 +10,7 @@ import App from './App';
 import './styles.css';
 import { updatePageMetadata } from './lib/seo';
 
+// Older iOS releases expose Home Screen mode only through navigator.standalone.
+document.documentElement.classList.toggle('ios-standalone', (navigator as Navigator & { standalone?: boolean }).standalone === true);
 updatePageMetadata(location.pathname);
 ReactDOM.createRoot(document.getElementById('root')!).render(<React.StrictMode><App /></React.StrictMode>);

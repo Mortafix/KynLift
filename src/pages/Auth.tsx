@@ -37,8 +37,8 @@ export function AuthPage() {
       const reduced = window.innerWidth < 760 && (window.innerHeight < 600 || height < window.innerHeight - 120);
       keyboardOpen = reduced && (editing || keyboardOpen);
       if (screen.current) {
-        // Use native dynamic viewport sizing outside keyboard interactions: Safari
-        // can briefly report a stale visualViewport when restoring an installed app.
+        // Outside keyboard interactions CSS chooses the browser/installed height;
+        // visualViewport can report a stale measure when restoring an iOS app.
         screen.current.dataset.keyboardOpen = String(keyboardOpen);
         const style = getComputedStyle(screen.current);
         const availableHeight = screen.current.clientHeight - parseFloat(style.paddingTop) - parseFloat(style.paddingBottom);

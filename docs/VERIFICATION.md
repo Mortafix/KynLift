@@ -96,3 +96,16 @@ Build di produzione e 76 test unitari superati; ripetuti e superati i 7 test bro
 Gli errori delle operazioni Auth vengono restituiti al modulo che li ha generati, senza conservarli nel banner globale. Gli errori asincroni del collegamento sono consumati nella schermata account; quelli dei dati sono mostrati nella sezione «I tuoi dati». La modifica del nome usa solo l’icona matita. La foto apre il dialog condiviso con anteprima e comandi «Cambia»/«Rimuovi»; le modifiche vengono confermate con «Salva profilo» e si possono annullare.
 
 Build di produzione, 76 test unitari e tutti i 35 scenari browser superati. Il nuovo scenario forza un errore di validazione nel salvataggio e verifica che non compaia nell’intestazione né sulle altre pagine. Verificati anche errori immagine confinati al dialog, chiusura con Escape, ritorno del focus e layout mobile/desktop. Nessun deploy eseguito.
+
+## Altezza dell’app salvata sulla Home — 11 settembre 2026
+
+Le immagini fornite dall’iPhone mostrano una fascia vuota sotto la navigazione nella PWA installata e campi numerici troppo compressi. Il comportamento è compatibile con [WebKit 254868](https://bugs.webkit.org/show_bug.cgi?id=254868): alcune misure dinamiche delle app installate escludono le safe area anche con `viewport-fit=cover`.
+
+- Altezza condivisa da accesso, pagine e allenamento: `100dvh` nel browser, `100vh` nelle modalità standalone/fullscreen, con fallback `navigator.standalone` per iOS. Le safe area sono applicate nel layout; la tastiera continua a usare il visual viewport.
+- L’allenamento compatto risponde all’altezza effettiva del contenuto. Etichette e spaziature si riducono quando serve, conservando i pulsanti numerici di almeno 48px e i controlli all’interno dei riquadri.
+- Build di produzione e 76 test unitari superati; tutti i 37 scenari Chromium e i 5 scenari di layout in WebKit superati. La regressione del nome lungo è stata ulteriormente verificata aspettando il completamento del cambio esercizio.
+- Nuova regressione PWA: viewport 402×874, safe area 59/34px, misure dinamiche simulate di 781px. Verifica accesso, navigazione, profilo, allenamento e ritorno all’altezza completa dopo la tastiera. Contenimento dei riquadri verificato anche a 402×781 e 320×740.
+- Verifica visiva WebKit dell’accesso e dell’allenamento su smartphone e desktop. Catture locali in `/tmp/kynlift-pwa-qa/`. Nessun errore JavaScript nelle pagine esaminate.
+- Corretto il refuso del dominio Auth nella configurazione locale ignorata da Git: `kynlift.moris.dev`, coerente con `site.config.json`.
+
+I browser automatici simulano il problema delle misure, ma non eseguono una vera installazione sulla Home di iOS. Resta necessaria la prova sull’iPhone con la nuova build pubblicata. Nessun deploy effettuato; frontend pronto in `dist/`.

@@ -18,6 +18,26 @@ async function expectFullShell(page: Page, height: number, safeTop = 0, safeBott
   expect(await page.evaluate(() => ({ scrollY, height: document.documentElement.scrollHeight }))).toEqual({ scrollY: 0, height });
 }
 
+async function expectContainedControls(page: Page) {
+  await page.evaluate(() => document.fonts.ready);
+  let previousBottom = 0;
+  for (const field of await page.locator('.main-number-fields .number-field').all()) {
+    const box = (await field.boundingBox())!;
+    expect(box.y).toBeGreaterThanOrEqual(previousBottom);
+    previousBottom = box.y + box.height;
+    const heading = (await field.locator('.number-field-heading').boundingBox())!;
+    for (const control of await field.locator('.number-controls > *').all()) {
+      const bounds = (await control.boundingBox())!;
+      expect(bounds.y).toBeGreaterThanOrEqual(heading.y + heading.height);
+      expect(bounds.y + bounds.height).toBeLessThanOrEqual(box.y + box.height - 1);
+      expect(bounds.height).toBeGreaterThanOrEqual(48);
+    }
+  }
+  const fields = (await page.locator('.main-number-fields').boundingBox())!;
+  const last = (await page.locator('.main-number-fields .number-field').last().boundingBox())!;
+  expect(last.y + last.height).toBeLessThanOrEqual(fields.y + fields.height + 1);
+}
+
 test('ogni pagina mobile riempie lo schermo, protegge le safe area e scorre nel contenuto', async ({ page }) => {
   await page.setViewportSize({ width: 402, height: 874 });
   await page.goto('/');
@@ -62,6 +82,85 @@ test('ogni pagina mobile riempie lo schermo, protegge le safe area e scorre nel 
   await expect(page.getByRole('heading', { name: 'Hip thrust', exact: true })).toBeVisible();
   await expectFullShell(page, 874, 59, 34);
   await expect(page.getByRole('button', { name: 'Salva serie', exact: true })).toBeInViewport({ ratio: 1 });
+  await expectContainedControls(page);
+});
+
+test('la PWA installata riempie la Home anche con misure dinamiche iOS ridotte e dopo la tastiera', async ({ page }) => {
+  await page.setViewportSize({ width: 402, height: 874 });
+  await page.addInitScript(() => {
+    Object.defineProperty(navigator, 'standalone', { value: true });
+    Object.defineProperty(window, 'innerHeight', { value: 781 });
+    const viewport = new EventTarget();
+    Object.defineProperties(viewport, {
+      height: { value: 781, writable: true }, offsetTop: { value: 0 },
+      width: { value: 402 }, scale: { value: 1 },
+    });
+    Object.defineProperty(window, 'visualViewport', { value: viewport });
+  });
+  // Desktop engines cannot launch an actual iOS Home Screen app. Reproduce the
+  // reported mismatch: dynamic units/APIs omit 59 + 34px, while vh spans 874px.
+  await page.route('**/*.css', async (route) => {
+    const response = await route.fetch();
+    const css = (await response.text()).replaceAll('100dvh', 'calc(100vh - 93px)');
+    await route.fulfill({ response, body: css });
+  });
+  await page.goto('/');
+  await page.addStyleTag({ content: ':root { --safe-area-top: 59px; --safe-area-bottom: 34px; }' });
+  expect((await page.locator('.auth-screen').boundingBox())!.height).toBe(874);
+  await enterDemo(page);
+  await expectFullShell(page, 874, 59, 34);
+  for (const tab of ['Schede', 'Progressi', 'Allenamento']) {
+    await page.locator('.bottom-nav').getByRole('button', { name: tab, exact: true }).click();
+    await expectFullShell(page, 874, 59, 34);
+  }
+  await page.getByRole('button', { name: 'Apri impostazioni account', exact: true }).click();
+  await expect(page.getByRole('heading', { name: 'Il tuo account', exact: true })).toBeVisible();
+  await expectFullShell(page, 874, 59, 34);
+  await page.locator('.bottom-nav').getByRole('button', { name: 'Allenamento', exact: true }).click();
+  await page.getByRole('button', { name: 'Apri Lower body A', exact: true }).click();
+  await page.getByRole('button', { name: 'Inizia allenamento', exact: true }).click();
+  await expect(page.locator('.workout-page')).toBeVisible();
+  await expectFullShell(page, 874, 59, 34);
+  await expectContainedControls(page);
+
+  await page.getByRole('textbox', { name: 'Peso', exact: true }).focus();
+  await page.evaluate(() => {
+    Object.assign(window.visualViewport!, { height: 450 });
+    window.visualViewport!.dispatchEvent(new Event('resize'));
+  });
+  await expect(page.locator('.app-shell')).toHaveClass(/keyboard-open/);
+  await expect(page.locator('.bottom-nav')).toBeHidden();
+  await expect(page.getByRole('button', { name: 'Salva serie', exact: true })).toBeInViewport({ ratio: 1 });
+  await page.evaluate(() => {
+    (document.activeElement as HTMLElement)?.blur();
+    Object.assign(window.visualViewport!, { height: 781 });
+    window.visualViewport!.dispatchEvent(new Event('resize'));
+    window.dispatchEvent(new Event('pageshow'));
+  });
+  await expect(page.locator('.app-shell')).not.toHaveClass(/keyboard-open/);
+  await expectFullShell(page, 874, 59, 34);
+  await expectContainedControls(page);
+});
+
+test('i controlli restano nei riquadri quando barre e safe area riducono lo spazio', async ({ page }) => {
+  await page.setViewportSize({ width: 402, height: 781 });
+  await page.goto('/');
+  await page.addStyleTag({ content: ':root { --safe-area-top: 59px; --safe-area-bottom: 34px; }' });
+  await enterDemo(page);
+  await page.getByRole('button', { name: 'Apri Lower body A', exact: true }).click();
+  await page.getByRole('button', { name: 'Inizia allenamento', exact: true }).click();
+  await expect(page.locator('.workout-page')).toBeVisible();
+  await expectFullShell(page, 781, 59, 34);
+  await expectContainedControls(page);
+  await page.getByRole('button', { name: 'Esercizi', exact: false }).first().click();
+  await page.locator('.workout-agenda').getByRole('button', { name: /Bulgarian split squat/ }).click();
+  await expect(page.locator('.workout-page .exercise-heading h1')).toHaveText('Bulgarian split squat');
+  await expectContainedControls(page);
+  await expect(page.getByRole('button', { name: 'Salva serie', exact: true })).toBeInViewport({ ratio: 1 });
+  await page.setViewportSize({ width: 320, height: 740 });
+  await page.addStyleTag({ content: ':root { --safe-area-top: 44px; }' });
+  await expectFullShell(page, 740, 44, 34);
+  await expectContainedControls(page);
 });
 
 for (const viewport of [{ width: 390, height: 844 }, { width: 720, height: 900 }]) {

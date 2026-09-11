@@ -16,12 +16,20 @@
   --border: #33333e;
   --font-number: 'Barlow Condensed', sans-serif;
   --bottom-nav-height: 76px;
+  --app-height: 100dvh;
   --safe-area-top: env(safe-area-inset-top, 0px);
   --safe-area-right: env(safe-area-inset-right, 0px);
   --safe-area-bottom: env(safe-area-inset-bottom, 0px);
   --safe-area-left: env(safe-area-inset-left, 0px);
   --ease-out: cubic-bezier(.16, 1, .3, 1);
 }
+/* In installed iOS apps, dynamic viewport units can exclude the safe areas
+   even with viewport-fit=cover (WebKit #254868). The shell applies those insets
+   itself. Use the complete viewport here; Safari tabs still follow their bars. */
+@media (display-mode: standalone), (display-mode: fullscreen) {
+  :root { --app-height: 100vh; }
+}
+:root.ios-standalone { --app-height: 100vh; }
 * { box-sizing: border-box; }
 html { min-width: 320px; scrollbar-color: #555561 #101014; scrollbar-width: thin; scroll-padding-bottom: 120px; }
 body { margin: 0; min-width: 320px; }
@@ -94,7 +102,7 @@ summary::-webkit-details-marker { color: var(--text-secondary); }
 .brand { display: inline-flex; align-items: center; gap: 12px; color: var(--text); font-weight: 700; font-size: 30px; letter-spacing: -.025em; line-height: 1; }
 .brand svg { color: var(--accent); width: 34px; height: 34px; }
 .brand-button { display: inline-flex; align-items: center; min-height: 48px; padding: 0; border: 0; background: transparent; }
-.app-shell { min-height: 100dvh; display: flex; flex-direction: column; }
+.app-shell { min-height: var(--app-height); display: flex; flex-direction: column; }
 .app-header { width: 100%; max-width: 1176px; margin-inline: auto; min-height: 94px; padding: 20px 28px; display: flex; align-items: center; justify-content: space-between; gap: 26px; flex-shrink: 0; }
 .desktop-nav { display: flex; align-items: center; gap: 8px; }
 .desktop-nav button { display: flex; align-items: center; justify-content: center; gap: 8px; min-height: 48px; padding: 12px 16px; background: transparent; border: 0; color: var(--text-secondary); font-size: 15px; font-weight: 500; border-radius: 8px; }
@@ -304,8 +312,8 @@ button.avatar:hover { border-color: var(--accent); color: var(--text); }
 .history-options { border-top: 1px solid var(--border); }
 
 body:has(.auth-screen) { overflow: hidden; }
-.auth-screen { position: fixed; top: 0; inset-inline: 0; width: 100%; max-width: 1200px; height: 100dvh; margin-inline: auto; padding: var(--safe-area-top) 40px var(--safe-area-bottom); display: grid; grid-template-rows: auto minmax(0, 1fr) auto; overflow: hidden; }
-.auth-screen[data-keyboard-open='true'] { height: var(--auth-viewport-height, 100dvh); top: var(--auth-viewport-top, 0px); }
+.auth-screen { position: fixed; top: 0; inset-inline: 0; width: 100%; max-width: 1200px; height: var(--app-height); margin-inline: auto; padding: var(--safe-area-top) 40px var(--safe-area-bottom); display: grid; grid-template-rows: auto minmax(0, 1fr) auto; overflow: hidden; }
+.auth-screen[data-keyboard-open='true'] { height: var(--auth-viewport-height, var(--app-height)); top: var(--auth-viewport-top, 0px); }
 .auth-header { min-height: 96px; display: flex; align-items: center; justify-content: space-between; gap: 24px; }
 .auth-header-note { color: var(--text-secondary); font-size: 14px; }
 .auth-layout { display: grid; grid-template-columns: minmax(0, 1fr) 390px; min-height: 0; gap: 100px; padding-block: 24px; }
@@ -353,9 +361,8 @@ body:has(.auth-screen) { overflow: hidden; }
 }
 @media (max-width: 759px) {
   html:has(.app-shell), body:has(.app-shell) { height: 100%; overflow: hidden; }
-  /* Let the browser size the complete shell, including an installed iOS PWA.
-     Header and navigation stay in its flow; only page content scrolls. */
-  .app-shell { height: 100dvh; min-height: 0; padding: var(--safe-area-top) var(--safe-area-right) 0 var(--safe-area-left); overflow: hidden; }
+  /* Header and navigation stay in the shell's flow; only page content scrolls. */
+  .app-shell { height: var(--app-height); min-height: 0; padding: var(--safe-area-top) var(--safe-area-right) 0 var(--safe-area-left); overflow: hidden; }
   #main-content { min-height: 0; overflow-y: auto; overscroll-behavior-y: contain; scroll-padding-block: 16px 24px; }
   .page { padding: 26px 20px 38px; }
   .page-header { gap: 14px; margin-bottom: 26px; }
@@ -379,7 +386,7 @@ body:has(.auth-screen) { overflow: hidden; }
   .resume-strip { bottom: calc(var(--bottom-nav-height) + var(--safe-area-bottom) + 10px); font-size: 13px; gap: 9px; width: calc(100% - 32px); }
   .resume-strip strong { margin-left: auto; }
   .app-shell:has(.resume-strip) .page { padding-bottom: 108px; }
-  .app-shell.keyboard-open { position: fixed; top: var(--visual-viewport-top, 0px); inset-inline: 0; height: var(--visual-viewport-height, 100dvh); }
+  .app-shell.keyboard-open { position: fixed; top: var(--visual-viewport-top, 0px); inset-inline: 0; height: var(--visual-viewport-height, var(--app-height)); }
   .keyboard-open .bottom-nav, .keyboard-open .resume-strip { display: none; }
   .keyboard-open .editor-actions { position: static; }
   .mobile-only { display: inline-flex; }
