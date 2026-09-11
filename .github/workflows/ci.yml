@@ -1,0 +1,124 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+env:
+  CI: 'true'
+  VITE_SITE_INDEXING: 'false'
+  VITE_FIREBASE_API_KEY: ''
+  VITE_FIREBASE_AUTH_DOMAIN: ''
+  VITE_FIREBASE_PROJECT_ID: ''
+  VITE_FIREBASE_APP_ID: ''
+  VITE_FIREBASE_EXPLICIT_LINKING: 'false'
+
+jobs:
+  web:
+    name: Web, SEO e dipendenze
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - name: Node 24 LTS e pnpm da package.json
+        uses: pnpm/setup@v2
+        with:
+          runtime: node@24
+          cache: true
+          install: false
+
+      - name: Installa le versioni nel lockfile
+        id: dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Test unitari
+        run: npm test
+
+      - name: Build demo senza indicizzazione
+        run: npm run build
+
+      - name: Controlla HTML, SEO e risorse prodotte
+        run: npm run check:dist
+
+      - name: Verifica routing, cache e proxy Nginx sulla build
+        run: |
+          sudo apt-get update
+          sudo apt-get install --yes nginx
+          python3 deploy/verify-nginx.py --dist dist
+
+      - name: Installa Chromium e dipendenze di sistema
+        run: pnpm exec playwright install --with-deps chromium
+
+      - name: Test browser sulla build
+        run: npm run test:e2e -- --project=mobile-chromium --workers=2
+
+      - name: Audit dipendenze di produzione
+        if: ${{ !cancelled() && steps.dependencies.outcome == 'success' }}
+        run: pnpm audit --prod --audit-level moderate
+
+      - name: Conserva la build demo verificata
+        uses: actions/upload-artifact@v7
+        with:
+          name: dist-demo
+          path: dist/
+          if-no-files-found: error
+          retention-days: 7
+
+      - name: Conserva le trace dei test falliti
+        if: ${{ failure() }}
+        uses: actions/upload-artifact@v7
+        with:
+          name: playwright-failure
+          path: test-results/
+          if-no-files-found: ignore
+          retention-days: 7
+
+  emulators:
+    name: Firebase Auth e regole Firestore
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - name: Node 24 LTS e pnpm da package.json
+        uses: pnpm/setup@v2
+        with:
+          runtime: node@24
+          cache: true
+          install: false
+
+      - name: Installa le versioni nel lockfile
+        run: pnpm install --frozen-lockfile
+
+      - name: Java 21 per Firestore
+        uses: actions/setup-java@v6
+        with:
+          distribution: temurin
+          java-version: '21'
+
+      - name: Verifica Auth e Firestore sul progetto locale demo-kinlift
+        run: npm run test:emulators
+
+      - name: Conserva i log degli emulatori falliti
+        if: ${{ failure() }}
+        uses: actions/upload-artifact@v7
+        with:
+          name: firebase-emulator-failure
+          path: |
+            firebase-debug.log
+            firestore-debug.log
+          if-no-files-found: ignore
+          retention-days: 7

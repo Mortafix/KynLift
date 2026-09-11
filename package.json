@@ -1,0 +1,51 @@
+{
+  "name": "kynlift",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "packageManager": "pnpm@11.19.0",
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "scripts": {
+    "dev": "vite --host 127.0.0.1",
+    "build": "tsc -b && vite build",
+    "preflight": "node scripts/check-production-env.mjs",
+    "check:dist": "node scripts/check-dist.mjs",
+    "build:production": "npm run preflight && npm run build && node scripts/check-dist.mjs --production",
+    "release:check": "npm run test && npm run test:emulators && npm run build:production && npm run test:e2e",
+    "check:live": "node scripts/check-live.mjs",
+    "social:generate": "node scripts/generate-social-card.mjs",
+    "preview": "vite preview --host 127.0.0.1",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:e2e": "playwright test",
+    "test:rules": "firebase emulators:exec --only firestore --project demo-kinlift 'vitest run tests/firestore.rules.test.ts'",
+    "test:auth": "firebase emulators:exec --only auth --project demo-kinlift 'vitest run tests/auth.emulator.test.ts'",
+    "test:emulators": "firebase emulators:exec --only auth,firestore --project demo-kinlift 'vitest run tests/auth.emulator.test.ts tests/firestore.rules.test.ts'"
+  },
+  "dependencies": {
+    "@fontsource/barlow": "^5.2.0",
+    "@fontsource/barlow-condensed": "^5.2.0",
+    "firebase": "^12.0.0",
+    "idb": "^8.0.0",
+    "lucide-react": "^0.577.0",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "workbox-window": "^7.4.1"
+  },
+  "devDependencies": {
+    "@firebase/rules-unit-testing": "^5.0.0",
+    "@playwright/test": "^1.58.0",
+    "@types/node": "^24.0.0",
+    "@types/react": "^19.2.0",
+    "@types/react-dom": "^19.2.0",
+    "@vitejs/plugin-react": "^5.1.0",
+    "fake-indexeddb": "^6.0.0",
+    "firebase-tools": "^15.0.0",
+    "typescript": "^5.9.0",
+    "vite": "^7.3.0",
+    "vite-plugin-pwa": "^1.2.0",
+    "vitest": "^4.0.0"
+  }
+}

@@ -1,0 +1,88 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function owner(uid) { return request.auth != null && request.auth.uid == uid; }
+    function optionalNumber(value) { return value == null || value is number; }
+    function synchronization(value) {
+      return !('_sync' in value) || (value._sync is map
+        && value._sync.keys().hasOnly(['revision', 'clientId', 'sequence', 'cursors', 'committedAt'])
+        && value._sync.revision is string && value._sync.revision.size() > 0 && value._sync.revision.size() <= 200
+        && value._sync.clientId is string && value._sync.clientId.size() > 0 && value._sync.clientId.size() <= 200
+        && value._sync.sequence is int && value._sync.sequence > 0
+        && (!('cursors' in value._sync) || value._sync.cursors is map)
+        && value._sync.committedAt == request.time);
+    }
+    function common(id) {
+      let value = request.resource.data;
+      return value.id == id && value.id is string && value.id.size() <= 200
+        && value.createdAt is number && value.createdAt >= 0
+        && value.updatedAt is number && value.updatedAt >= value.createdAt
+        && (!('deletedAt' in value) || optionalNumber(value.deletedAt)) && synchronization(value);
+    }
+    function exercise() {
+      let value = request.resource.data;
+      return value.keys().hasOnly(['id', 'createdAt', 'updatedAt', 'deletedAt', '_sync', 'name', 'equipment', 'muscleGroup', 'loadMode', 'loadMultiplier', 'unilateral', 'increment'])
+        && value.name is string && value.name.size() > 0 && value.name.size() <= 200
+        && value.equipment is string && value.equipment.size() <= 200
+        && value.muscleGroup in ['Gambe', 'Glutei', 'Dorso', 'Petto', 'Spalle', 'Bicipiti', 'Tricipiti', 'Core', 'Altro']
+        && value.loadMode in ['total', 'per-hand', 'bodyweight', 'assisted']
+        && value.loadMultiplier in [1, 2] && value.unilateral is bool
+        && value.increment is number && value.increment > 0 && value.increment <= 100;
+    }
+    function routine() {
+      let value = request.resource.data;
+      return value.keys().hasOnly(['id', 'createdAt', 'updatedAt', 'deletedAt', '_sync', 'name', 'description', 'exercises'])
+        && value.name is string && value.name.size() > 0 && value.name.size() <= 200
+        && value.description is string && value.description.size() <= 5000
+        && value.exercises is list && value.exercises.size() <= 200;
+    }
+    function session() {
+      let value = request.resource.data;
+      return value.keys().hasOnly(['id', 'createdAt', 'updatedAt', 'deletedAt', '_sync', 'routineId', 'routineName', 'startedAt', 'finishedAt', 'status', 'exercises', 'note', 'currentExercise', 'currentSet', 'restEndsAt', 'restDuration', 'workStartedAt', 'pausedAt', 'pausedDurationMs', 'energy', 'sleepHours'])
+        && (value.routineId == null || value.routineId is string)
+        && value.routineName is string && value.routineName.size() <= 200
+        && value.startedAt is number && optionalNumber(value.finishedAt)
+        && value.status in ['active', 'completed', 'discarded']
+        && value.exercises is list && value.exercises.size() <= 200
+        && value.note is string && value.note.size() <= 5000
+        && value.currentExercise is int && value.currentExercise >= 0
+        && value.currentSet is int && value.currentSet >= 0
+        && optionalNumber(value.restEndsAt)
+        && (!('workStartedAt' in value) || value.workStartedAt == null || (value.workStartedAt is number && value.workStartedAt >= 0))
+        && (!('pausedAt' in value) || value.pausedAt == null || (value.pausedAt is number && value.pausedAt >= 0))
+        && (!('pausedDurationMs' in value) || (value.pausedDurationMs is number && value.pausedDurationMs >= 0))
+        && (!('energy' in value) || value.energy == null || (value.energy is int && value.energy >= 1 && value.energy <= 5))
+        && (!('sleepHours' in value) || value.sleepHours == null || (value.sleepHours is number && value.sleepHours >= 0 && value.sleepHours <= 24 && (value.sleepHours * 2) == int(value.sleepHours * 2)))
+        && value.restDuration is number && value.restDuration >= 0 && value.restDuration <= 3600;
+    }
+    function setEntry() {
+      let value = request.resource.data;
+      return value.keys().hasOnly(['id', 'createdAt', 'updatedAt', 'deletedAt', '_sync', 'sessionId', 'sessionExerciseId', 'index', 'weight', 'reps', 'rir', 'rightWeight', 'rightReps', 'note', 'completedAt', 'durationMs'])
+        && value.sessionId is string && value.sessionId.size() <= 200
+        && value.sessionExerciseId is string && value.sessionExerciseId.size() <= 200
+        && value.index is int && value.index >= 0
+        && value.weight is number && value.weight >= 0 && value.weight <= 2000
+        && value.reps is int && value.reps >= 0 && value.reps <= 1000
+        && (value.rir == null || (value.rir is number && value.rir >= 0 && value.rir <= 10))
+        && (value.rightWeight == null || (value.rightWeight is number && value.rightWeight >= 0 && value.rightWeight <= 2000))
+        && (value.rightReps == null || (value.rightReps is int && value.rightReps >= 0 && value.rightReps <= 1000))
+        && value.note is string && value.note.size() <= 5000
+        && optionalNumber(value.completedAt)
+        && (!('durationMs' in value) || value.durationMs == null || (value.durationMs is number && value.durationMs >= 0));
+    }
+    function valid(kind, id) {
+      return common(id)
+        && ((kind == 'exercises' && exercise()) || (kind == 'routines' && routine())
+          || (kind == 'sessions' && session()) || (kind == 'sets' && setEntry()));
+    }
+    match /users/{uid}/{kind}/{id} {
+      allow read: if owner(uid) && kind in ['exercises', 'routines', 'sessions', 'sets'];
+      allow create: if owner(uid) && valid(kind, id);
+      allow update: if owner(uid) && valid(kind, id)
+        && (!('_sync' in resource.data) || '_sync' in request.resource.data);
+      // Deletions are durable tombstones so every device receives them.
+      allow delete: if false;
+    }
+    match /{document=**} { allow read, write: if false; }
+  }
+}

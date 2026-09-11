@@ -1,0 +1,13 @@
+{
+  "prompt": "Use case: ui-mockup. Create one meticulous high fidelity flat mobile web app screen, 390x844 logical pixels in portrait. It is KinLift, an Italian gym workout set logger. Operate mode; every visible element is an actual app interface, no phone bezel, no perspective, no poster, no photos, no illustration, no textures. Fixed brand: solid background #101014, very subtle panel surface #19191F, hot pink #FF4F93 only action and selection, offwhite #F5F5F7, readable muted gray. Typography Barlow medium for labels, Barlow Condensed semibold for large training numbers; carefully typeset tabular digits, sophisticated athletic stopwatch aesthetic, no gradients, no neon glow. Thumb friendly controls. Header has original geometric KL monogram and \"KinLift\", small circular \"M\" avatar. Bottom navigation \"Allenamento\" (active pink), \"Schede\", \"Progressi\" with simple consistent line icons. Main job register one set at a time. Realistic SYNTHETIC example data, not commercial claims: routine \"Lower body A\", exercise \"Hip thrust\", set \"Serie 2 di 4\", goal \"Obiettivo 8–10 ripetizioni\", previous \"Ultima volta 60 kg × 10\", editable weight \"60\" label \"kg\", editable reps \"10\" label \"ripetizioni\", optional \"RIR\" \"2\", \"Note\", recovery \"Recupero 02:00\", prominent pink bottom button \"Salva serie\" with check icon. Include an accessible overview affordance \"Esercizi\" with list icon and small \"2 di 5\" overall exercise position. No eyebrow above main heading. No motivational fluff, no fabricated claims. All content above is visibly legible at realistic app sizes. State is before saving the current set, no success toast. COMPOSITION B — VERTICAL SCORE. Header with routine and overview. Exercise name big flush left. Narrow vertical progress rail at left with four numbered set stops, active second in pink. To its right stack TWO BROAD HORIZONTAL editable metric rows: weight 60 kg large at right on first row, reps 10 large at right on second, small labeled minus/plus at sides. Previous result as one aligned row under exercise title. RIR chip and note link beside last metric row. Small rest line and full-width bottom pink save button. No card containing a card. Big typographic athletic score display, strong vertical cadence; labels readable. All navigation and controls fit.",
+  "approved": true,
+  "tool": "image_gen",
+  "image": "option-2.png",
+  "approvedBy": "User message: design preferito numero 2 (centrale)",
+  "approvedChanges": [
+    "Product name Kynlift",
+    "Remove Ultima volta comparison",
+    "Remove notes from workout",
+    "Rest duration fixed by routine; no workout adjustment"
+  ]
+}

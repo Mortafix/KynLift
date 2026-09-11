@@ -1,0 +1,430 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-09-10T14:02:22.127057Z",
+  "title": "Design System: Kynlift",
+  "extensions": {
+    "colorMeta": {
+      "background": {
+        "role": "neutral",
+        "displayName": "Nero pista",
+        "tonalRamp": [
+          "oklch(15.00% 0.00821 285.52)",
+          "oklch(26.43% 0.00821 285.52)",
+          "oklch(37.86% 0.00821 285.52)",
+          "oklch(49.29% 0.00821 285.52)",
+          "oklch(60.71% 0.00821 285.52)",
+          "oklch(72.14% 0.00821 285.52)",
+          "oklch(83.57% 0.00821 285.52)",
+          "oklch(95.00% 0.00821 285.52)"
+        ]
+      },
+      "surface": {
+        "role": "neutral",
+        "displayName": "Antracite pannello",
+        "tonalRamp": [
+          "oklch(15.00% 0.01169 285.38)",
+          "oklch(26.43% 0.01169 285.38)",
+          "oklch(37.86% 0.01169 285.38)",
+          "oklch(49.29% 0.01169 285.38)",
+          "oklch(60.71% 0.01169 285.38)",
+          "oklch(72.14% 0.01169 285.38)",
+          "oklch(83.57% 0.01169 285.38)",
+          "oklch(95.00% 0.01169 285.38)"
+        ]
+      },
+      "surface-raised": {
+        "role": "neutral",
+        "displayName": "Antracite rialzata",
+        "tonalRamp": [
+          "oklch(15.00% 0.01495 285.29)",
+          "oklch(26.43% 0.01495 285.29)",
+          "oklch(37.86% 0.01495 285.29)",
+          "oklch(49.29% 0.01495 285.29)",
+          "oklch(60.71% 0.01495 285.29)",
+          "oklch(72.14% 0.01495 285.29)",
+          "oklch(83.57% 0.01495 285.29)",
+          "oklch(95.00% 0.01495 285.29)"
+        ]
+      },
+      "accent": {
+        "role": "primary",
+        "displayName": "Rosa cronometro",
+        "tonalRamp": [
+          "oklch(15.00% 0.21733 1.13)",
+          "oklch(26.43% 0.21733 1.13)",
+          "oklch(37.86% 0.21733 1.13)",
+          "oklch(49.29% 0.21733 1.13)",
+          "oklch(60.71% 0.21733 1.13)",
+          "oklch(72.14% 0.21733 1.13)",
+          "oklch(83.57% 0.21733 1.13)",
+          "oklch(95.00% 0.21733 1.13)"
+        ]
+      },
+      "accent-hover": {
+        "role": "primary",
+        "displayName": "Rosa di passaggio",
+        "tonalRamp": [
+          "oklch(15.00% 0.17131 358.78)",
+          "oklch(26.43% 0.17131 358.78)",
+          "oklch(37.86% 0.17131 358.78)",
+          "oklch(49.29% 0.17131 358.78)",
+          "oklch(60.71% 0.17131 358.78)",
+          "oklch(72.14% 0.17131 358.78)",
+          "oklch(83.57% 0.17131 358.78)",
+          "oklch(95.00% 0.17131 358.78)"
+        ]
+      },
+      "text": {
+        "role": "neutral",
+        "displayName": "Bianco lettura",
+        "tonalRamp": [
+          "oklch(15.00% 0.00265 286.35)",
+          "oklch(26.43% 0.00265 286.35)",
+          "oklch(37.86% 0.00265 286.35)",
+          "oklch(49.29% 0.00265 286.35)",
+          "oklch(60.71% 0.00265 286.35)",
+          "oklch(72.14% 0.00265 286.35)",
+          "oklch(83.57% 0.00265 286.35)",
+          "oklch(95.00% 0.00265 286.35)"
+        ]
+      },
+      "text-secondary": {
+        "role": "neutral",
+        "displayName": "Grigio contesto",
+        "tonalRamp": [
+          "oklch(15.00% 0.01549 286.03)",
+          "oklch(26.43% 0.01549 286.03)",
+          "oklch(37.86% 0.01549 286.03)",
+          "oklch(49.29% 0.01549 286.03)",
+          "oklch(60.71% 0.01549 286.03)",
+          "oklch(72.14% 0.01549 286.03)",
+          "oklch(83.57% 0.01549 286.03)",
+          "oklch(95.00% 0.01549 286.03)"
+        ]
+      },
+      "border": {
+        "role": "neutral",
+        "displayName": "Grigio divisore",
+        "tonalRamp": [
+          "oklch(15.00% 0.01935 285.28)",
+          "oklch(26.43% 0.01935 285.28)",
+          "oklch(37.86% 0.01935 285.28)",
+          "oklch(49.29% 0.01935 285.28)",
+          "oklch(60.71% 0.01935 285.28)",
+          "oklch(72.14% 0.01935 285.28)",
+          "oklch(83.57% 0.01935 285.28)",
+          "oklch(95.00% 0.01935 285.28)"
+        ]
+      },
+      "control-border": {
+        "role": "neutral",
+        "displayName": "Grigio controllo",
+        "tonalRamp": [
+          "oklch(15.00% 0.02010 285.44)",
+          "oklch(26.43% 0.02010 285.44)",
+          "oklch(37.86% 0.02010 285.44)",
+          "oklch(49.29% 0.02010 285.44)",
+          "oklch(60.71% 0.02010 285.44)",
+          "oklch(72.14% 0.02010 285.44)",
+          "oklch(83.57% 0.02010 285.44)",
+          "oklch(95.00% 0.02010 285.44)"
+        ]
+      },
+      "tag-background": {
+        "role": "neutral",
+        "displayName": "Antracite etichetta",
+        "tonalRamp": [
+          "oklch(15.00% 0.01483 285.34)",
+          "oklch(26.43% 0.01483 285.34)",
+          "oklch(37.86% 0.01483 285.34)",
+          "oklch(49.29% 0.01483 285.34)",
+          "oklch(60.71% 0.01483 285.34)",
+          "oklch(72.14% 0.01483 285.34)",
+          "oklch(83.57% 0.01483 285.34)",
+          "oklch(95.00% 0.01483 285.34)"
+        ]
+      },
+      "tag-text": {
+        "role": "neutral",
+        "displayName": "Grigio etichetta",
+        "tonalRamp": [
+          "oklch(15.00% 0.01523 286.06)",
+          "oklch(26.43% 0.01523 286.06)",
+          "oklch(37.86% 0.01523 286.06)",
+          "oklch(49.29% 0.01523 286.06)",
+          "oklch(60.71% 0.01523 286.06)",
+          "oklch(72.14% 0.01523 286.06)",
+          "oklch(83.57% 0.01523 286.06)",
+          "oklch(95.00% 0.01523 286.06)"
+        ]
+      },
+      "error-text": {
+        "role": "neutral",
+        "displayName": "Testo errore",
+        "tonalRamp": [
+          "oklch(15.00% 0.09533 359.29)",
+          "oklch(26.43% 0.09533 359.29)",
+          "oklch(37.86% 0.09533 359.29)",
+          "oklch(49.29% 0.09533 359.29)",
+          "oklch(60.71% 0.09533 359.29)",
+          "oklch(72.14% 0.09533 359.29)",
+          "oklch(83.57% 0.09533 359.29)",
+          "oklch(95.00% 0.09533 359.29)"
+        ]
+      },
+      "error-background": {
+        "role": "neutral",
+        "displayName": "Fondo errore",
+        "tonalRamp": [
+          "oklch(15.00% 0.03690 350.02)",
+          "oklch(26.43% 0.03690 350.02)",
+          "oklch(37.86% 0.03690 350.02)",
+          "oklch(49.29% 0.03690 350.02)",
+          "oklch(60.71% 0.03690 350.02)",
+          "oklch(72.14% 0.03690 350.02)",
+          "oklch(83.57% 0.03690 350.02)",
+          "oklch(95.00% 0.03690 350.02)"
+        ]
+      },
+      "success-text": {
+        "role": "neutral",
+        "displayName": "Conferma",
+        "tonalRamp": [
+          "oklch(15.00% 0.05099 154.92)",
+          "oklch(26.43% 0.05099 154.92)",
+          "oklch(37.86% 0.05099 154.92)",
+          "oklch(49.29% 0.05099 154.92)",
+          "oklch(60.71% 0.05099 154.92)",
+          "oklch(72.14% 0.05099 154.92)",
+          "oklch(83.57% 0.05099 154.92)",
+          "oklch(95.00% 0.05099 154.92)"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Valore operativo",
+        "purpose": "Peso e ripetizioni, con cifre tabulari."
+      },
+      "headline": {
+        "displayName": "Esercizio",
+        "purpose": "Titolo condensato della superficie Allenamento."
+      },
+      "title": {
+        "displayName": "Titolo pagina",
+        "purpose": "Intestazione principale delle pagine ordinarie."
+      },
+      "section": {
+        "displayName": "Sezione",
+        "purpose": "Gruppi e intestazioni secondarie."
+      },
+      "body": {
+        "displayName": "Testo",
+        "purpose": "Spiegazioni e testo dell’interfaccia."
+      },
+      "label": {
+        "displayName": "Etichetta",
+        "purpose": "Etichette persistenti dei campi."
+      },
+      "button": {
+        "displayName": "Azione",
+        "purpose": "Pulsanti ordinari."
+      }
+    },
+    "shadows": [
+      {
+        "name": "set-saved-status",
+        "value": "0 12px 32px #0006",
+        "purpose": "Conferma temporanea di salvataggio; i pannelli ordinari non hanno ombra."
+      }
+    ],
+    "motion": [
+      {
+        "name": "ease-out",
+        "value": "cubic-bezier(.16, 1, .3, 1)",
+        "purpose": "Curve delle transizioni dei controlli e ingresso della conferma."
+      },
+      {
+        "name": "button-state",
+        "value": ".16s",
+        "purpose": "Colore del fondo e del bordo dei pulsanti ordinari."
+      },
+      {
+        "name": "set-state",
+        "value": ".18s",
+        "purpose": "Colore e fondo delle tappe della guida delle serie."
+      },
+      {
+        "name": "saved-arrival",
+        "value": ".22s",
+        "purpose": "Ingresso della conferma con opacità, sfocatura e spostamento di 8px."
+      },
+      {
+        "name": "spinner",
+        "value": "1s linear infinite",
+        "purpose": "Indicatori di attesa."
+      },
+      {
+        "name": "sync-pending",
+        "value": "2s linear infinite",
+        "purpose": "Indicatore della sincronizzazione in attesa."
+      },
+      {
+        "name": "reduced-motion",
+        "value": ".01ms",
+        "purpose": "Durata delle transizioni e animazioni globali quando è richiesto movimento ridotto; una sola iterazione."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "narrow-phone-max",
+        "value": "359px"
+      },
+      {
+        "name": "routine-stack-max",
+        "value": "600px"
+      },
+      {
+        "name": "progress-stack-max",
+        "value": "700px"
+      },
+      {
+        "name": "mobile-max",
+        "value": "759px"
+      },
+      {
+        "name": "desktop-min",
+        "value": "760px"
+      },
+      {
+        "name": "compact-desktop-max",
+        "value": "1050px"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Pulsante primario",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Conferma una serie o avvia l’azione principale.",
+      "html": "<button type=\"button\" class=\"ds-primary\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M20 6 9 17l-5-5\"/></svg>Salva serie</button>",
+      "css": ".ds-primary { display: inline-flex; align-items: center; justify-content: center; gap: 10px; min-height: 48px; padding: 12px 20px; border: 1px solid transparent; border-radius: 12px; font: 600 16px/1.25 Barlow, sans-serif; text-align: center; cursor: pointer; touch-action: manipulation; transition: background-color .16s var(--ease-out, cubic-bezier(.16, 1, .3, 1)), border-color .16s var(--ease-out, cubic-bezier(.16, 1, .3, 1)); } .ds-primary svg { flex-shrink: 0; }.ds-primary:focus-visible { outline: 2px solid var(--accent, #ff4f93); outline-offset: 4px; }.ds-primary:disabled { cursor: not-allowed; opacity: .42; }@media (prefers-reduced-motion: reduce) { .ds-primary { transition-duration: .01ms; } }.ds-primary { color: var(--background, #101014); background: var(--accent, #ff4f93); } .ds-primary:hover:not(:disabled) { background: var(--accent-hover, #ff78aa); } .ds-primary:active:not(:disabled) { background: #ee397e; }"
+    },
+    {
+      "name": "Pulsante secondario",
+      "kind": "button",
+      "refersTo": "button-secondary",
+      "description": "Azione esplicita con una gerarchia inferiore alla conferma.",
+      "html": "<button type=\"button\" class=\"ds-secondary\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M5 12h14\"/><path d=\"M12 5v14\"/></svg>Aggiungi una serie</button>",
+      "css": ".ds-secondary { display: inline-flex; align-items: center; justify-content: center; gap: 10px; min-height: 48px; padding: 12px 20px; border: 1px solid transparent; border-radius: 12px; font: 600 16px/1.25 Barlow, sans-serif; text-align: center; cursor: pointer; touch-action: manipulation; transition: background-color .16s var(--ease-out, cubic-bezier(.16, 1, .3, 1)), border-color .16s var(--ease-out, cubic-bezier(.16, 1, .3, 1)); } .ds-secondary svg { flex-shrink: 0; }.ds-secondary:focus-visible { outline: 2px solid var(--accent, #ff4f93); outline-offset: 4px; }.ds-secondary:disabled { cursor: not-allowed; opacity: .42; }@media (prefers-reduced-motion: reduce) { .ds-secondary { transition-duration: .01ms; } }.ds-secondary { color: var(--text, #f5f5f7); background: var(--surface, #19191f); border-color: #454551; } .ds-secondary:hover:not(:disabled) { background: #272730; border-color: #6a6a77; }"
+    },
+    {
+      "name": "Pulsante ghost",
+      "kind": "button",
+      "refersTo": "button-ghost",
+      "description": "Azione contestuale leggera, senza superficie persistente.",
+      "html": "<button type=\"button\" class=\"ds-ghost\">Precedente</button>",
+      "css": ".ds-ghost { display: inline-flex; align-items: center; justify-content: center; gap: 10px; min-height: 48px; padding: 12px 20px; border: 1px solid transparent; border-radius: 12px; font: 600 16px/1.25 Barlow, sans-serif; text-align: center; cursor: pointer; touch-action: manipulation; transition: background-color .16s var(--ease-out, cubic-bezier(.16, 1, .3, 1)), border-color .16s var(--ease-out, cubic-bezier(.16, 1, .3, 1)); } .ds-ghost svg { flex-shrink: 0; }.ds-ghost:focus-visible { outline: 2px solid var(--accent, #ff4f93); outline-offset: 4px; }.ds-ghost:disabled { cursor: not-allowed; opacity: .42; }@media (prefers-reduced-motion: reduce) { .ds-ghost { transition-duration: .01ms; } }.ds-ghost { color: var(--text-secondary, #b4b4bf); background: transparent; } .ds-ghost:hover:not(:disabled) { color: var(--text, #f5f5f7); background: var(--surface, #19191f); }"
+    },
+    {
+      "name": "Pulsante icona",
+      "kind": "button",
+      "refersTo": "button-icon",
+      "description": "Controllo compatto con area interattiva di 48px e nome accessibile.",
+      "html": "<button type=\"button\" class=\"ds-icon\" aria-label=\"Chiudi elenco esercizi\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M18 6 6 18\"/><path d=\"m6 6 12 12\"/></svg></button>",
+      "css": ".ds-icon { display: inline-flex; align-items: center; justify-content: center; width: 48px; min-height: 48px; padding: 11px; border: 1px solid transparent; border-radius: 10px; background: transparent; color: var(--text-secondary, #b4b4bf); cursor: pointer; touch-action: manipulation; } .ds-icon:hover:not(:disabled) { color: var(--text, #f5f5f7); background: var(--surface-raised, #22222a); }.ds-icon:focus-visible { outline: 2px solid var(--accent, #ff4f93); outline-offset: 4px; }.ds-icon:disabled { cursor: not-allowed; opacity: .42; }"
+    },
+    {
+      "name": "Pulsante testuale",
+      "kind": "button",
+      "refersTo": "button-text",
+      "description": "Collegamento operativo nelle intestazioni di sezione.",
+      "html": "<button type=\"button\" class=\"ds-text\">Gestisci<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M5 12h14\"/><path d=\"m12 5 7 7-7 7\"/></svg></button>",
+      "css": ".ds-text { display: inline-flex; align-items: center; justify-content: center; gap: 10px; min-height: 48px; padding: 8px 0; border: 1px solid transparent; background: transparent; color: var(--accent, #ff4f93); font: 600 14px/1.25 Barlow, sans-serif; cursor: pointer; } .ds-text:hover { text-decoration: underline; text-underline-offset: 4px; }.ds-text:focus-visible { outline: 2px solid var(--accent, #ff4f93); outline-offset: 4px; }.ds-text:disabled { cursor: not-allowed; opacity: .42; }"
+    },
+    {
+      "name": "Campo con etichetta",
+      "kind": "input",
+      "refersTo": "input",
+      "description": "Campo ordinario degli editor; etichetta persistente e suggerimento separato.",
+      "html": "<label class=\"ds-field\" for=\"ds-routine-name\">Nome della scheda<input id=\"ds-routine-name\" class=\"ds-input\" value=\"La mia scheda\" aria-describedby=\"ds-field-hint\"/></label><p id=\"ds-field-hint\" class=\"ds-hint\">Un nome che riconosci al volo.</p>",
+      "css": ".ds-field { display: flex; flex-direction: column; gap: 8px; min-width: 0; color: var(--text, #f5f5f7); font: 500 15px Barlow, sans-serif; } .ds-input { width: auto; min-width: 0; max-width: 100%; min-height: 48px; padding: 12px 14px; border: 1px solid #454551; border-radius: 10px; color: var(--text, #f5f5f7); background: var(--surface, #19191f); font: 400 16px Barlow, sans-serif; caret-color: var(--accent, #ff4f93); } .ds-input:hover { border-color: #454551; } .ds-input::placeholder { color: #a4a4b0; } .ds-input:disabled { opacity: .55; } .ds-hint { color: var(--text-secondary, #b4b4bf); font: 400 13px/1.5 Barlow, sans-serif; margin: 10px 0 0; }.ds-input:focus-visible { outline: 2px solid var(--accent, #ff4f93); outline-offset: 4px; }"
+    },
+    {
+      "name": "Navigazione principale",
+      "kind": "nav",
+      "refersTo": "navigation",
+      "description": "Tre destinazioni con variante desktop e disposizione mobile; la barra è in flusso nel campione.",
+      "html": "<nav class=\"ds-nav\" aria-label=\"Navigazione principale\"><button type=\"button\" class=\"ds-nav-button\" aria-current=\"page\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"23\" height=\"23\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M17.596 12.768a2 2 0 1 0 2.829-2.829l-1.768-1.767a2 2 0 0 0 2.828-2.829l-2.828-2.828a2 2 0 0 0-2.829 2.828l-1.767-1.768a2 2 0 1 0-2.829 2.829z\"/><path d=\"m2.5 21.5 1.4-1.4\"/><path d=\"m20.1 3.9 1.4-1.4\"/><path d=\"M5.343 21.485a2 2 0 1 0 2.829-2.828l1.767 1.768a2 2 0 1 0 2.829-2.829l-6.364-6.364a2 2 0 1 0-2.829 2.829l1.768 1.767a2 2 0 0 0-2.828 2.829z\"/><path d=\"m9.6 14.4 4.8-4.8\"/></svg><span>Allenamento</span></button><button type=\"button\" class=\"ds-nav-button\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"23\" height=\"23\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M13 5h8\"/><path d=\"M13 12h8\"/><path d=\"M13 19h8\"/><path d=\"m3 17 2 2 4-4\"/><path d=\"m3 7 2 2 4-4\"/></svg><span>Schede</span></button><button type=\"button\" class=\"ds-nav-button\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"23\" height=\"23\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M22 12h-2.48a2 2 0 0 0-1.93 1.46l-2.35 8.36a.25.25 0 0 1-.48 0L9.24 2.18a.25.25 0 0 0-.48 0l-2.35 8.36A2 2 0 0 1 4.49 12H2\"/></svg><span>Progressi</span></button></nav>",
+      "css": ".ds-nav { display: flex; align-items: center; gap: 8px; background: var(--background, #101014); } .ds-nav-button { display: flex; align-items: center; justify-content: center; gap: 8px; min-height: 48px; padding: 12px 16px; border: 0; border-radius: 8px; background: transparent; color: var(--text-secondary, #b4b4bf); font: 500 15px Barlow, sans-serif; cursor: pointer; } .ds-nav-button svg { flex-shrink: 0; width: 19px; height: 19px; } .ds-nav-button[aria-current=\"page\"] { color: var(--accent, #ff4f93); background: #291a24; } .ds-nav-button:hover { color: var(--text, #f5f5f7); }.ds-nav-button:focus-visible { outline: 2px solid var(--accent, #ff4f93); outline-offset: 4px; }@media (max-width: 759px) { .ds-nav { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0; padding: 0 12px; border-top: 1px solid var(--border, #33333e); } .ds-nav-button { position: relative; flex-direction: column; gap: 7px; padding: 12px 4px 14px; min-height: var(--bottom-nav-height, 76px); border-radius: 0; font-size: 13px; } .ds-nav-button svg { width: 23px; height: 23px; } .ds-nav-button[aria-current=\"page\"] { color: var(--accent, #ff4f93); background: transparent; } .ds-nav-button[aria-current=\"page\"]::after { content: \"\"; height: 3px; width: 26px; border-radius: 3px; position: absolute; bottom: 5px; background: var(--accent, #ff4f93); } }"
+    },
+    {
+      "name": "Tag informativo",
+      "kind": "chip",
+      "refersTo": "tag",
+      "description": "Etichetta passiva di stato, senza comportamento da pulsante.",
+      "html": "<span class=\"ds-tag\"><span class=\"ds-live-dot\" aria-hidden=\"true\"></span>In corso</span>",
+      "css": ".ds-tag { display: inline-flex; align-items: center; gap: 6px; padding: 6px 9px; border-radius: 6px; color: #c5c5d0; background: #24242c; font: 400 12px/1.3 Barlow, sans-serif; } .ds-live-dot { display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--accent, #ff4f93); flex-shrink: 0; }"
+    },
+    {
+      "name": "Scheda di avvio",
+      "kind": "card",
+      "refersTo": "panel",
+      "description": "Superficie antracite per il prossimo allenamento, con titolo sopra i metadati e azione ampia.",
+      "html": "<article class=\"ds-start\"><h2 class=\"ds-start-title\">La mia scheda</h2><div class=\"ds-start-meta\">4 esercizi</div><p class=\"ds-start-description\">I valori sono già pronti: confermali o aggiornali a ogni serie.</p><button type=\"button\" class=\"ds-start-action\">Inizia allenamento<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M5 12h14\"/><path d=\"m12 5 7 7-7 7\"/></svg></button></article>",
+      "css": ".ds-start { padding: 28px; border-radius: 14px; background: var(--surface, #19191f); color: var(--text, #f5f5f7); font-family: Barlow, sans-serif; } .ds-start-title { font: 600 48px/1.02 var(--font-number, \"Barlow Condensed\", sans-serif); margin: 0 0 12px; overflow-wrap: anywhere; } .ds-start-meta { margin: 14px 0 22px; color: var(--text-secondary, #b4b4bf); font-size: 13px; } .ds-start-description { margin: 0; color: #c5c5d0; font-size: 15px; line-height: 1.5; }.ds-start-action { display: inline-flex; align-items: center; justify-content: center; gap: 10px; min-height: 48px; padding: 12px 20px; border: 1px solid transparent; border-radius: 12px; font: 600 16px/1.25 Barlow, sans-serif; text-align: center; cursor: pointer; touch-action: manipulation; transition: background-color .16s var(--ease-out, cubic-bezier(.16, 1, .3, 1)), border-color .16s var(--ease-out, cubic-bezier(.16, 1, .3, 1)); } .ds-start-action svg { flex-shrink: 0; }.ds-start-action:focus-visible { outline: 2px solid var(--accent, #ff4f93); outline-offset: 4px; }.ds-start-action:disabled { cursor: not-allowed; opacity: .42; }@media (prefers-reduced-motion: reduce) { .ds-start-action { transition-duration: .01ms; } }.ds-start-action { color: var(--background, #101014); background: var(--accent, #ff4f93); } .ds-start-action:hover:not(:disabled) { background: var(--accent-hover, #ff78aa); } .ds-start-action:active:not(:disabled) { background: #ee397e; }.ds-start-action { width: 100%; margin-top: 26px; } @media (max-width: 759px) { .ds-start { padding: 24px; } .ds-start-title { font-size: 42px; } .ds-start-meta { margin-bottom: 16px; } }"
+    },
+    {
+      "name": "Serie verticale e recupero",
+      "kind": "custom",
+      "refersTo": "number-panel",
+      "description": "Campione visivo dei pannelli numerici, guida laterale e recupero fisso; nessuna logica React richiesta.",
+      "html": "<section class=\"ds-set-workspace\"><div class=\"ds-set-rail\" aria-label=\"Serie dell’esercizio\"><button type=\"button\" class=\"ds-set ds-completed\" aria-label=\"Serie 1, completata\">1</button><button type=\"button\" class=\"ds-set\" aria-label=\"Serie 2\" aria-current=\"step\">2</button><button type=\"button\" class=\"ds-set\" aria-label=\"Serie 3\">3</button></div><div class=\"ds-set-fields\"><p class=\"ds-set-label\">Serie 2 di 3</p><div class=\"ds-number-stack\"><div class=\"ds-number-panel\"><div class=\"ds-number-heading\"><label for=\"ds-weight\">Peso</label><span class=\"ds-number-unit\">kg</span></div><div class=\"ds-number-controls\"><button type=\"button\" aria-label=\"Diminuisci peso\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M5 12h14\"/></svg></button><input id=\"ds-weight\" aria-label=\"Peso\" value=\"80\" inputmode=\"decimal\" autocomplete=\"off\"/><button type=\"button\" aria-label=\"Aumenta peso\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M5 12h14\"/><path d=\"M12 5v14\"/></svg></button></div></div><div class=\"ds-number-panel\"><div class=\"ds-number-heading\"><label for=\"ds-reps\">Ripetizioni</label><span class=\"ds-number-unit\">reps</span></div><div class=\"ds-number-controls\"><button type=\"button\" aria-label=\"Diminuisci ripetizioni\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M5 12h14\"/></svg></button><input id=\"ds-reps\" aria-label=\"Ripetizioni\" value=\"8\" inputmode=\"numeric\" autocomplete=\"off\"/><button type=\"button\" aria-label=\"Aumenta ripetizioni\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M5 12h14\"/><path d=\"M12 5v14\"/></svg></button></div></div></div></div><div class=\"ds-rest\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"28\" height=\"28\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><line x1=\"10\" x2=\"14\" y1=\"2\" y2=\"2\"/><line x1=\"12\" x2=\"15\" y1=\"14\" y2=\"11\"/><circle cx=\"12\" cy=\"14\" r=\"8\"/></svg><div class=\"ds-rest-description\"><span>Recupero</span><small>Definito nella scheda</small></div><strong class=\"ds-rest-time\" role=\"timer\" aria-label=\"Tempo di recupero\">01:30</strong></div></section>",
+      "css": ".ds-set-workspace { display: grid; grid-template-columns: 48px minmax(0, 1fr); column-gap: 24px; align-items: start; color: var(--text, #f5f5f7); font-family: Barlow, sans-serif; } .ds-set-rail { position: relative; display: flex; flex-direction: column; align-items: center; gap: 20px; padding-top: 36px; } .ds-set-rail::before { content: ''; position: absolute; top: 60px; bottom: 24px; left: calc(50% - .5px); width: 1px; background: #50505d; } .ds-set { position: relative; width: 48px; min-height: 48px; flex-shrink: 0; border: 1px solid #595967; border-radius: 50%; background: #131319; color: var(--text-secondary, #b4b4bf); font: 500 23px/1 var(--font-number, 'Barlow Condensed', sans-serif); cursor: pointer; transition: color .18s var(--ease-out, cubic-bezier(.16, 1, .3, 1)), background-color .18s var(--ease-out, cubic-bezier(.16, 1, .3, 1)); } .ds-set:hover:not(:disabled) { border-color: #f5a1c0; } .ds-set[aria-current='step'] { background: var(--accent, #ff4f93); border-color: var(--accent, #ff4f93); color: var(--background, #101014); font-weight: 600; } .ds-set.ds-completed:not([aria-current]) { border-color: #bc6c8b; color: #ffc0d9; } .ds-set.ds-completed:not([aria-current])::after { content: ''; width: 4px; height: 4px; position: absolute; bottom: 6px; left: calc(50% - 2px); border-radius: 50%; background: currentColor; } .ds-set-fields { min-width: 0; } .ds-set-label { color: #d4d4de; font-size: 19px; font-weight: 500; line-height: 1.2; margin: 0 0 14px; } .ds-number-stack { display: grid; gap: 14px; } .ds-number-panel { min-width: 0; padding: 13px 16px 14px; border: 1px solid var(--border, #33333e); background: var(--surface, #19191f); border-radius: 12px; } .ds-number-panel:focus-within { border-color: #b66a89; } .ds-number-heading { display: flex; align-items: center; justify-content: space-between; gap: 8px; font-size: 16px; color: var(--text-secondary, #b4b4bf); margin-bottom: 6px; } .ds-number-unit { font-size: 14px; } .ds-number-controls { display: grid; grid-template-columns: 48px minmax(0, 1fr) 48px; align-items: center; gap: 12px; } .ds-number-controls button { display: flex; align-items: center; justify-content: center; width: 48px; height: 48px; min-height: 48px; padding: 0; border-radius: 50%; border: 1px solid #40404e; background: #22222b; color: var(--accent, #ff4f93); cursor: pointer; touch-action: manipulation; } .ds-number-controls button:hover:not(:disabled) { background: #36212e; border-color: #ad5a7b; } .ds-number-controls input { width: 100%; min-width: 0; height: 72px; min-height: 60px; padding: 0; background: transparent; border: 0; border-radius: 6px; text-align: center; color: var(--text, #f5f5f7); font: 600 clamp(46px, 5.7vw, 76px)/1 var(--font-number, 'Barlow Condensed', sans-serif); font-variant-numeric: tabular-nums; letter-spacing: -.02em; caret-color: var(--accent, #ff4f93); } .ds-number-controls input:disabled { opacity: .55; } .ds-rest { grid-column: 1 / -1; display: flex; align-items: center; gap: 16px; border-top: 1px solid var(--border, #33333e); padding-block: 18px; margin-top: 22px; min-height: 90px; } .ds-rest > svg { color: var(--text-secondary, #b4b4bf); flex-shrink: 0; } .ds-rest-description { display: flex; flex-direction: column; flex: 1; gap: 3px; color: var(--text-secondary, #b4b4bf); font-size: 16px; } .ds-rest-description small { font-size: 12px; } .ds-rest-time { font: 600 38px/1 var(--font-number, 'Barlow Condensed', sans-serif); font-variant-numeric: tabular-nums; } @media (max-width: 759px) { .ds-set-workspace { column-gap: 14px; } .ds-set-rail { padding-top: 32px; } .ds-set-rail::before { top: 56px; } .ds-set-label { font-size: 17px; margin-bottom: 12px; } .ds-number-stack { gap: 12px; } .ds-number-panel { padding: 11px 12px; } .ds-number-heading { font-size: 15px; margin-bottom: 5px; } .ds-number-unit { font-size: 12px; } .ds-number-controls { gap: 4px; } .ds-number-controls input { font-size: clamp(44px, 16vw, 64px); height: 58px; min-height: 58px; letter-spacing: -.025em; } .ds-rest { gap: 12px; margin-top: 10px; padding-block: 14px; min-height: 74px; } .ds-rest-description { font-size: 15px; } .ds-rest-time { font-size: 34px; } } @media (max-width: 359px) { .ds-set-workspace { column-gap: 8px; } .ds-number-panel { padding-inline: 8px; } .ds-number-controls input { font-size: 44px; } } @media (prefers-reduced-motion: reduce) { .ds-set { transition-duration: .01ms; } }.ds-set:focus-visible { outline: 2px solid var(--accent, #ff4f93); outline-offset: 4px; }.ds-number-controls button:focus-visible { outline: 2px solid var(--accent, #ff4f93); outline-offset: 4px; }.ds-number-controls input:focus-visible { outline: 2px solid var(--accent, #ff4f93); outline-offset: 0; }.ds-set:disabled { cursor: not-allowed; opacity: .42; }.ds-number-controls button:disabled { cursor: not-allowed; opacity: .42; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "Cronometro da pista",
+    "overview": "Kynlift ha il carattere di uno strumento da palestra: fondo scuro, numeri grandi, controlli diretti e un accento rosa che segnala l'azione e il punto attivo. La coppia Barlow e Barlow Condensed lega il testo quotidiano al ritmo di un cronometro.\n\nLa densità segue il compito. I valori da registrare ricevono spazio e contrasto; le informazioni di contesto restano più piccole, ma leggibili. Schede, storico e progressi usano righe, divisori e gruppi ordinati. L'interfaccia è in italiano, con un tono diretto e amichevole, e il tema implementato è scuro.",
+    "keyCharacteristics": [
+      "Numeri condensati e tabulari per risultati, carichi e tempi.",
+      "Rosa per azioni, selezione e dati in evidenza.",
+      "Superfici antracite, bordi sottili e profondità contenuta.",
+      "Controlli principali raggiungibili con il pollice e focus visibile.",
+      "Marchio Kynlift con monogramma KL originale."
+    ],
+    "rules": [
+      {
+        "name": "The Action Color Rule",
+        "body": "Usa il rosa per azioni, selezioni e informazioni da seguire; mantieni il contesto nella scala neutra.",
+        "section": "colors"
+      },
+      {
+        "name": "The Stable Numbers Rule",
+        "body": "Usa cifre tabulari per carichi, ripetizioni, tempi e statistiche, affinché l'allineamento resti stabile quando cambiano i valori.",
+        "section": "typography"
+      },
+      {
+        "name": "The Quiet Surface Rule",
+        "body": "Usa tono e bordo per distinguere le superfici; riserva l'ombra al riscontro temporaneo già previsto.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "**Do** scrivere sempre Kynlift e usare il monogramma KL originale.",
+      "**Do** assegnare ai numeri importanti la famiglia condensata e le cifre tabulari.",
+      "**Do** mantenere etichette, unità e stato visibili accanto ai dati.",
+      "**Do** conservare almeno 48px per i controlli principali e un focus chiaramente visibile.",
+      "**Do** adattare colonne, testi lunghi e spazio inferiore alla tastiera e alle aree sicure.",
+      "**Do** usare righe e divisori quando una nuova superficie piena non serve alla gerarchia."
+    ],
+    "donts": [
+      "**Don't** introdurre un tema chiaro o un secondo accento di marca nell'attuale sistema.",
+      "**Don't** aggiungere ombre decorative ai pannelli ordinari o movimenti di sollevamento ai pulsanti.",
+      "**Don't** affidare selezione, errore o conferma soltanto al colore.",
+      "**Don't** sostituire le etichette dei controlli con icone prive di nome accessibile.",
+      "**Don't** comprimere i valori operativi per dare più spazio a elementi ornamentali."
+    ]
+  }
+}
