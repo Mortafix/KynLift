@@ -25,6 +25,8 @@ export interface Prescription {
   sets: number;
   repsMin: number;
   repsMax: number;
+  /** Zero-based set indices whose repetition target is MAX. Missing means none. */
+  maxRepsSets?: number[];
   rir: number | null;
   restSeconds: number;
   note: string;

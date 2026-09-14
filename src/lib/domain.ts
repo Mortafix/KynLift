@@ -1,4 +1,4 @@
-import type { Exercise, ExerciseSnapshot, Routine, SessionExercise, SetEntry, WorkoutSession } from '../types';
+import type { Exercise, ExerciseSnapshot, Prescription, Routine, SessionExercise, SetEntry, WorkoutSession } from '../types';
 
 export const id = () => crypto.randomUUID();
 
@@ -17,7 +17,7 @@ export function createSession(routine: Routine, exercises: Exercise[], now = Dat
       id: entry.id,
       sourceExerciseId: exerciseId,
       snapshot: { id: exerciseId, name, equipment, muscleGroup, loadMode, loadMultiplier, unilateral, increment },
-      target: { sets, repsMin, repsMax, rir, restSeconds, note },
+      target: { sets, repsMin, repsMax, rir, restSeconds, note, ...(entry.maxRepsSets === undefined ? {} : { maxRepsSets: [...entry.maxRepsSets] }) },
       note: '',
     };
   });
@@ -42,7 +42,7 @@ export function createSet(
     id: `${session.id}:${exercise.id}:${index}`, createdAt: now, updatedAt: now,
     sessionId: session.id, sessionExerciseId: exercise.id, index,
     weight: suggestion?.weight ?? 0,
-    reps: suggestion?.reps ?? exercise.target.repsMax,
+    reps: suggestion?.reps ?? (isMaxReps(exercise.target, index) ? 0 : exercise.target.repsMax),
     rir: suggestion?.rir !== undefined ? suggestion.rir : exercise.target.rir,
     rightWeight: suggestion?.rightWeight ?? null, rightReps: suggestion?.rightReps ?? null,
     note: '', completedAt: null,
@@ -90,6 +90,18 @@ export function initialSet(
     rightWeight: latest.rightWeight,
     rightReps: latest.rightWeight !== null || latest.rightReps !== null ? previous?.rightReps ?? null : null,
   } : previous);
+}
+
+export function isMaxReps(target: Pick<Prescription, 'sets' | 'maxRepsSets'>, index: number): boolean {
+  return Number.isInteger(index) && index >= 0 && index < target.sets && (target.maxRepsSets?.includes(index) ?? false);
+}
+
+export function formatRepsTarget(target: Pick<Prescription, 'sets' | 'repsMin' | 'repsMax' | 'maxRepsSets'>, index?: number): string {
+  const range = target.repsMin === target.repsMax ? String(target.repsMin) : `${target.repsMin}–${target.repsMax}`;
+  if (index !== undefined) return isMaxReps(target, index) ? 'MAX' : range;
+  const maxCount = new Set((target.maxRepsSets ?? []).filter((position) => Number.isInteger(position) && position >= 0 && position < target.sets)).size;
+  if (!maxCount) return range;
+  return maxCount === target.sets ? 'MAX' : `${range} / MAX`;
 }
 
 export function loadLabel(exercise: Pick<ExerciseSnapshot, 'loadMode' | 'unilateral' | 'loadMultiplier'>): string {

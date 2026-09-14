@@ -7,16 +7,18 @@ import type { Exercise, MuscleGroup, Routine, RoutineExercise } from '../types';
 import './routines.css';
 
 interface RoutinesProps { onCatalog: () => void; onDirtyChange?: (dirty: boolean) => void }
-interface ExerciseDraft { id: string; exerciseId: string; sets: string; repsMin: string; repsMax: string; rir: string; restSeconds: string; note: string }
+interface ExerciseDraft { id: string; exerciseId: string; sets: string; repsMin: string; repsMax: string; maxRepsSets: number[]; rir: string; restSeconds: string; note: string }
 interface RoutineDraft { id: string; createdAt: number; name: string; description: string; exercises: ExerciseDraft[] }
 const muscles: MuscleGroup[] = ['Gambe', 'Glutei', 'Dorso', 'Petto', 'Spalle', 'Bicipiti', 'Tricipiti', 'Core', 'Altro'];
 const numberOf = (value: string) => Number(value.trim().replace(',', '.'));
 const integerIn = (value: string, min: number, max: number) => value.trim() !== '' && Number.isInteger(numberOf(value)) && numberOf(value) >= min && numberOf(value) <= max;
 const fromRoutine = (routine: Routine): RoutineDraft => ({
   id: routine.id, createdAt: routine.createdAt, name: routine.name, description: routine.description,
-  exercises: routine.exercises.map((item) => ({ ...item, sets: String(item.sets), repsMin: String(item.repsMin), repsMax: String(item.repsMax), rir: item.rir === null ? '' : String(item.rir), restSeconds: String(item.restSeconds) })),
+  exercises: routine.exercises.map((item) => ({ ...item, maxRepsSets: [...(item.maxRepsSets ?? [])], sets: String(item.sets), repsMin: String(item.repsMin), repsMax: String(item.repsMax), rir: item.rir === null ? '' : String(item.rir), restSeconds: String(item.restSeconds) })),
 });
-const newExercise = (exerciseId: string): ExerciseDraft => ({ id: crypto.randomUUID(), exerciseId, sets: '3', repsMin: '8', repsMax: '12', rir: '', restSeconds: '90', note: '' });
+const newExercise = (exerciseId: string): ExerciseDraft => ({ id: crypto.randomUUID(), exerciseId, sets: '3', repsMin: '8', repsMax: '12', maxRepsSets: [], rir: '', restSeconds: '90', note: '' });
+const allSetsMax = (item: ExerciseDraft) => integerIn(item.sets, 1, 50) && item.maxRepsSets.length === numberOf(item.sets);
+const draftRepetitions = (item: ExerciseDraft) => allSetsMax(item) ? 'MAX' : `${item.repsMin || '—'}${item.repsMax !== item.repsMin ? `–${item.repsMax || '—'}` : ''}${item.maxRepsSets.length ? ' / MAX' : ''}`;
 
 export function Routines({ onCatalog, onDirtyChange }: RoutinesProps) {
   const confirm = useConfirm();
@@ -52,7 +54,12 @@ export function Routines({ onCatalog, onDirtyChange }: RoutinesProps) {
   }
   function patchDraft(patch: Partial<RoutineDraft>) { setDraft((current) => current ? { ...current, ...patch } : null); setDirty(true); setError(''); }
   function patchExercise(id: string, patch: Partial<ExerciseDraft>) {
-    setDraft((current) => current ? { ...current, exercises: current.exercises.map((item) => item.id === id ? { ...item, ...patch } : item) } : null);
+    setDraft((current) => current ? { ...current, exercises: current.exercises.map((item) => {
+      if (item.id !== id) return item;
+      const next = { ...item, ...patch };
+      if (patch.sets !== undefined && integerIn(patch.sets, 1, 50)) next.maxRepsSets = next.maxRepsSets.filter((index) => index < numberOf(patch.sets!));
+      return next;
+    }) } : null);
     setDirty(true); setError('');
   }
   async function closeEditor() {
@@ -85,13 +92,17 @@ export function Routines({ onCatalog, onDirtyChange }: RoutinesProps) {
       let problem = '';
       if (!name) problem = 'L’esercizio non è più nel catalogo. Rimuovilo o sostituiscilo.';
       else if (!integerIn(item.sets, 1, 50)) problem = 'Inserisci un numero di serie intero da 1 a 50.';
-      else if (!integerIn(item.repsMin, 1, 999) || !integerIn(item.repsMax, 1, 999)) problem = 'Inserisci ripetizioni intere da 1 a 999.';
-      else if (numberOf(item.repsMax) < numberOf(item.repsMin)) problem = 'Le ripetizioni massime devono essere almeno uguali alle minime.';
+      else if (!allSetsMax(item) && (!integerIn(item.repsMin, 1, 999) || !integerIn(item.repsMax, 1, 999))) problem = 'Inserisci ripetizioni intere da 1 a 999.';
+      else if (!allSetsMax(item) && numberOf(item.repsMax) < numberOf(item.repsMin)) problem = 'Le ripetizioni massime devono essere almeno uguali alle minime.';
       else if (item.rir.trim() && !integerIn(item.rir, 0, 10)) problem = 'Il RIR deve essere un numero intero tra 0 e 10, oppure vuoto.';
       else if (!integerIn(item.restSeconds, 0, 3600)) problem = 'Inserisci un recupero da 0 a 3600 secondi.';
       if (problem) { setError(`${name ?? `Esercizio ${index + 1}`}: ${problem}`); setExpanded(item.id); return; }
     }
-    const values: RoutineExercise[] = draft.exercises.map((item) => ({ ...item, sets: numberOf(item.sets), repsMin: numberOf(item.repsMin), repsMax: numberOf(item.repsMax), rir: item.rir.trim() ? numberOf(item.rir) : null, restSeconds: numberOf(item.restSeconds), note: item.note.trim() }));
+    const values: RoutineExercise[] = draft.exercises.map((item) => {
+      const repsMin = integerIn(item.repsMin, 1, 999) ? numberOf(item.repsMin) : 8;
+      const repsMax = integerIn(item.repsMax, repsMin, 999) ? numberOf(item.repsMax) : Math.max(repsMin, 12);
+      return { ...item, sets: numberOf(item.sets), repsMin, repsMax, rir: item.rir.trim() ? numberOf(item.rir) : null, restSeconds: numberOf(item.restSeconds), note: item.note.trim() };
+    });
     const routine: Routine = { id: draft.id, createdAt: draft.createdAt, updatedAt: Date.now(), name: draft.name.trim(), description: draft.description.trim(), exercises: values };
     setBusy(true); setError('');
     try { await save([{ collection: 'routines', value: routine }]); setDraft(null); setDirty(false); setNotice('Scheda salvata sul dispositivo.'); scrollPageToTop(); }
@@ -137,7 +148,7 @@ export function Routines({ onCatalog, onDirtyChange }: RoutinesProps) {
                 <div className="routine-exercise-top">
                   <button type="button" className="routine-exercise-toggle" onClick={() => setExpanded(isExpanded ? null : item.id)} aria-expanded={isExpanded} aria-controls={`exercise-fields-${item.id}`}>
                     <span className="exercise-order">{String(index + 1).padStart(2, '0')}</span>
-                    <span className="exercise-title"><strong>{exercise?.name ?? 'Esercizio non disponibile'}</strong><span className="muted">{item.sets || '—'} serie · {item.repsMin || '—'}{item.repsMax !== item.repsMin ? `–${item.repsMax || '—'}` : ''} ripetizioni · {item.restSeconds || '0'} s</span></span>
+                    <span className="exercise-title"><strong>{exercise?.name ?? 'Esercizio non disponibile'}</strong><span className="muted">{item.sets || '—'} serie · {draftRepetitions(item)} ripetizioni · {item.restSeconds || '0'} s</span></span>
                     <ChevronDown size={18} className={isExpanded ? 'chevron-open' : ''} aria-hidden="true" />
                   </button>
                   <div className="exercise-order-actions">
@@ -148,11 +159,17 @@ export function Routines({ onCatalog, onDirtyChange }: RoutinesProps) {
                 </div>
                 {isExpanded && <div className="prescription-fields" id={`exercise-fields-${item.id}`}>
                   <div className="prescription-grid">
+                    <div className="prescription-counts">
                     <label className="field">Serie<input inputMode="numeric" value={item.sets} onChange={(event) => patchExercise(item.id, { sets: event.target.value })} maxLength={3} required /></label>
-                    <label className="field">Ripetizioni min.<input inputMode="numeric" value={item.repsMin} onChange={(event) => patchExercise(item.id, { repsMin: event.target.value })} maxLength={3} required /></label>
-                    <label className="field">Ripetizioni max.<input inputMode="numeric" value={item.repsMax} onChange={(event) => patchExercise(item.id, { repsMax: event.target.value })} maxLength={3} required /></label>
-                    <label className="field">Recupero, secondi<input inputMode="numeric" value={item.restSeconds} onChange={(event) => patchExercise(item.id, { restSeconds: event.target.value })} maxLength={4} required /></label>
-                    <label className="field">RIR <span className="field-optional">facoltativo</span><input inputMode="numeric" value={item.rir} onChange={(event) => patchExercise(item.id, { rir: event.target.value })} placeholder="—" maxLength={2} /></label>
+                    <label className="field">Rep min.<input inputMode="numeric" disabled={allSetsMax(item)} value={item.repsMin} onChange={(event) => patchExercise(item.id, { repsMin: event.target.value })} maxLength={3} required /></label>
+                    <label className="field">Rep max.<input inputMode="numeric" disabled={allSetsMax(item)} value={item.repsMax} onChange={(event) => patchExercise(item.id, { repsMax: event.target.value })} maxLength={3} required /></label>
+                    </div>
+                    {integerIn(item.sets, 1, 50) && <div className="max-reps-field">
+                      <div className="max-reps-heading"><span id={`max-reps-${item.id}`}>MAX · Serie a cedimento</span><label className="check-label"><input type="checkbox" checked={allSetsMax(item)} onChange={(event) => patchExercise(item.id, { maxRepsSets: event.target.checked ? Array.from({ length: numberOf(item.sets) }, (_, index) => index) : [] })} />Tutte</label></div>
+                      <div className="max-reps-options" role="group" aria-labelledby={`max-reps-${item.id}`}>{Array.from({ length: numberOf(item.sets) }, (_, index) => <label className="max-reps-option" key={index}><input type="checkbox" checked={item.maxRepsSets.includes(index)} onChange={(event) => patchExercise(item.id, { maxRepsSets: event.target.checked ? [...item.maxRepsSets, index].sort((a, b) => a - b) : item.maxRepsSets.filter((value) => value !== index) })} />Serie {index + 1}</label>)}</div>
+                    </div>}
+                    <label className="field">Recupero (s)<input inputMode="numeric" value={item.restSeconds} onChange={(event) => patchExercise(item.id, { restSeconds: event.target.value })} maxLength={4} required /></label>
+                    <label className="field">RIR<input inputMode="numeric" value={item.rir} onChange={(event) => patchExercise(item.id, { rir: event.target.value })} placeholder="—" maxLength={2} /></label>
                   </div>
                   <p className="field-help">RIR: ripetizioni che pensi di avere ancora a disposizione a fine serie.</p>
                   <label className="field">Nota sull’esercizio <span className="field-optional">facoltativa</span><textarea rows={2} maxLength={5000} value={item.note} onChange={(event) => patchExercise(item.id, { note: event.target.value })} placeholder="Es. Discesa controllata, pausa in basso…" /></label>

@@ -1,4 +1,16 @@
-# Verifica Kynlift — 11 settembre 2026
+# Verifica Kynlift — 14 settembre 2026
+
+## Ripetizioni MAX come obiettivo — 14 settembre 2026
+
+Rifinitura successiva: Serie, Rep min. e Rep max. sulla stessa riga anche a 320px; etichetta Recupero (s) e RIR senza la dicitura facoltativo. Il badge MAX compare nella testata del campo Ripetizioni soltanto per le serie a cedimento. Build e 5 scenari browser delle schede passati; allineamento e badge verificati a 320, 390 e 1440px. Catture: `.impeccable/review/max-reps-labels/`.
+
+- TypeScript, build di produzione e 81 test unitari passati. I nuovi test coprono indici delle serie MAX, dati precedenti, persistenza, snapshot indipendenti e risultati sempre numerici.
+- Verificati 25 scenari browser di schede e allenamento: 24 passati nella prima esecuzione applicativa; corretto il nuovo test MAX per selezionare solo l’obiettivo, usare un esercizio senza storico e attendere la conferma del salvataggio prima del reload. I due scenari MAX ripetuti sulla build finale passano entrambi.
+- Confermati selezione singola/Tutte, intervallo numerico conservato, duplicazione, rimozione delle serie, riapertura, MAX nella sessione dopo una modifica della scheda e indicatore storico con il conteggio realmente eseguito.
+- 9 catture fra editor, riepilogo e allenamento su 320×740, 390×844 e 1440×1000. Checkbox da 22px dentro controlli da almeno 48px, nessun overflow orizzontale, allenamento fisso e Salva raggiungibile; nessun errore JavaScript.
+- Il modello aggiunge solo `maxRepsSets` opzionale nella prescrizione. Le regole Firestore esistenti accettano già questi campi annidati; non sono state modificate né pubblicate. Nessuna migrazione richiesta. Le verifiche di questa sezione usano soltanto dati demo locali.
+
+Catture, script e misure: `.impeccable/review/max-reps/`.
 
 ## Preparazione SEO e produzione — 11 settembre 2026
 

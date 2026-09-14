@@ -1,5 +1,6 @@
 import { ArrowLeft, CirclePlay, LoaderCircle, Timer } from 'lucide-react';
 import { useData } from '../data/DataContext';
+import { formatRepsTarget } from '../lib/domain';
 import type { Routine } from '../types';
 import './routine-preview.css';
 
@@ -26,11 +27,13 @@ export function RoutinePreview({ routine, onBack, onStart, busy = false }: Routi
     </header>
     <ol className="routine-preview-exercises" aria-label="Esercizi della scheda">{routine.exercises.map((entry, index) => {
       const exercise = exercises.get(entry.exerciseId);
-      const repetitions = entry.repsMin === entry.repsMax ? String(entry.repsMin) : `${entry.repsMin}–${entry.repsMax}`;
+      const repetitions = formatRepsTarget(entry);
+      const mixedMax = Boolean(entry.maxRepsSets?.length && entry.maxRepsSets.length < entry.sets);
       return <li key={entry.id} className="routine-preview-exercise">
         <span className="routine-preview-order" aria-hidden="true">{index + 1}</span>
         <div className="routine-preview-exercise-main"><h2>{exercise?.name ?? 'Esercizio non disponibile'}</h2>{exercise?.equipment && <p className="routine-preview-equipment">{exercise.equipment}</p>}
-          <div className="routine-preview-prescription"><span className="routine-preview-reps" aria-label={`${entry.sets} serie da ${entry.repsMin === entry.repsMax ? entry.repsMin : `${entry.repsMin} a ${entry.repsMax}`} ripetizioni`}><strong>{entry.sets} × {repetitions}</strong><span>rip.</span></span><span className="routine-preview-rest"><Timer size={16} aria-hidden="true" /><span>Recupero {entry.restSeconds} s</span></span>{entry.rir != null && <span className="routine-preview-rir">RIR <strong>{entry.rir}</strong></span>}</div>
+          <div className="routine-preview-prescription"><span className="routine-preview-reps" aria-label={`${entry.sets} serie da ${repetitions} ripetizioni`}><strong>{entry.sets} × {repetitions}</strong><span>rip.</span></span><span className="routine-preview-rest"><Timer size={16} aria-hidden="true" /><span>Recupero {entry.restSeconds} s</span></span>{entry.rir != null && <span className="routine-preview-rir">RIR <strong>{entry.rir}</strong></span>}</div>
+          {mixedMax && <p className="routine-preview-max">MAX: {entry.maxRepsSets!.map((index) => `serie ${index + 1}`).join(', ')}</p>}
         </div>
       </li>;
     })}</ol>

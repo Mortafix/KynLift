@@ -205,7 +205,7 @@ test('il recupero proviene dalla scheda e una modifica successiva conserva quell
   await demo(page); await startLower(page);
   await page.locator('.bottom-nav').getByRole('button', { name: 'Schede', exact: true }).click();
   await page.getByRole('button', { name: 'Modifica Lower body A', exact: true }).click();
-  await page.getByLabel('Recupero, secondi', { exact: true }).fill('75');
+  await page.getByLabel('Recupero (s)', { exact: true }).fill('75');
   await page.getByRole('button', { name: 'Salva scheda', exact: true }).click();
   await expect(page.getByRole('heading', { name: 'Le tue schede', exact: true })).toBeVisible();
   await page.locator('.resume-strip').click();

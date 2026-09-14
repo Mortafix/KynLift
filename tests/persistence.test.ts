@@ -3,6 +3,7 @@ import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { deleteDB } from 'idb';
 import { accountScope, emptyData, isStoredEntity, LocalStore } from '../src/data/persistence';
 import { createDemoData } from '../src/lib/seed';
+import { createSession, createSet } from '../src/lib/domain';
 import type { Exercise } from '../src/types';
 
 const sample = (id = 'squat', name = 'Squat'): Exercise => ({ id, name, equipment: 'Bilanciere', muscleGroup: 'Gambe', loadMode: 'total', loadMultiplier: 1, unilateral: false, increment: 2.5, createdAt: 1, updatedAt: 1 });
@@ -46,6 +47,37 @@ describe('persistenza locale e outbox', () => {
     for (const energy of [0, 6, 1.5, '4', Number.NaN]) expect(isStoredEntity({ ...session, energy }, session.id, 'sessions')).toBe(false);
     for (const sleepHours of [-1, 24.5, 7.25, '7', Number.POSITIVE_INFINITY]) expect(isStoredEntity({ ...session, sleepHours }, session.id, 'sessions')).toBe(false);
     for (const sleepHours of [0, 0.5, 24]) expect(isStoredEntity({ ...session, energy: 5, sleepHours }, session.id, 'sessions')).toBe(true);
+  });
+
+  it('conserva gli obiettivi MAX nella scheda e nello snapshot con risultati ancora numerici', async () => {
+    const demo = createDemoData();
+    const routine = { ...demo.routines[0], exercises: demo.routines[0].exercises.map((entry) => ({ ...entry, maxRepsSets: [0, entry.sets - 1] })) };
+    const session = createSession(routine, demo.exercises);
+    const entry = { ...createSet(session, session.exercises[0], 0, { weight: 50, reps: 13, rir: 0 }), completedAt: Date.now() };
+    await store.save('user:a', [{ collection: 'routines', value: routine }, { collection: 'sessions', value: session }, { collection: 'sets', value: entry }]);
+    await store.close(); store = new LocalStore(name);
+    const loaded = await store.load('user:a');
+    expect(loaded.invalidCount).toBe(0);
+    expect(loaded.data.routines[0].exercises[0].maxRepsSets).toEqual(routine.exercises[0].maxRepsSets);
+    expect(loaded.data.sessions[0].exercises[0].target.maxRepsSets).toEqual(routine.exercises[0].maxRepsSets);
+    expect(loaded.data.sets[0]).toMatchObject({ reps: 13, rir: 0, completedAt: entry.completedAt });
+    const pending = await store.pending('user:a');
+    expect(pending.find((change) => change.collection === 'sessions')?.value).toMatchObject({ exercises: [{ target: { maxRepsSets: routine.exercises[0].maxRepsSets } }, ...session.exercises.slice(1)] });
+  });
+
+  it('accetta MAX assente o con indici unici previsti e rifiuta array corrotti nelle schede e sessioni', () => {
+    const demo = createDemoData();
+    const routine = demo.routines[0];
+    const session = createSession(routine, demo.exercises);
+    const validateMaxSets = (maxRepsSets: unknown) => {
+      const editedRoutine = { ...routine, exercises: [{ ...routine.exercises[0], maxRepsSets }, ...routine.exercises.slice(1)] };
+      const editedSession = { ...session, exercises: [{ ...session.exercises[0], target: { ...session.exercises[0].target, maxRepsSets } }, ...session.exercises.slice(1)] };
+      return [isStoredEntity(editedRoutine, routine.id, 'routines'), isStoredEntity(editedSession, session.id, 'sessions')];
+    };
+    for (const value of [undefined, [], [0], [routine.exercises[0].sets - 1], [1, 0]]) expect(validateMaxSets(value)).toEqual([true, true]);
+    for (const value of [null, 'MAX', true, [-1], [0.5], ['0'], [0, 0], [routine.exercises[0].sets], [Number.NaN], Array(1), Array(1001).fill(0)]) expect(validateMaxSets(value)).toEqual([false, false]);
+    const boundary = { ...routine, exercises: [{ ...routine.exercises[0], sets: 1000, maxRepsSets: [999] }] };
+    expect(isStoredEntity(boundary, routine.id, 'routines')).toBe(true);
   });
 
   it('deduplica documenti stabili e non perde la nuova modifica quando arriva un vecchio ack', async () => {

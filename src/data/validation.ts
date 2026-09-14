@@ -18,6 +18,8 @@ function snapshot(value: unknown): boolean {
 function target(value: unknown): boolean {
   return record(value) && integer(value.sets, 1, 1000) && integer(value.repsMin, 0, 1000)
     && integer(value.repsMax, Number(value.repsMin), 1000) && optionalNumber(value.rir, 10)
+    && (value.maxRepsSets === undefined || (Array.isArray(value.maxRepsSets) && value.maxRepsSets.length <= Number(value.sets)
+      && [...value.maxRepsSets].every((index) => integer(index, 0, Number(value.sets) - 1)) && new Set(value.maxRepsSets).size === value.maxRepsSets.length))
     && number(value.restSeconds, 0, 3600) && text(value.note);
 }
 

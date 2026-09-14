@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { ArrowLeft, Check, ChevronDown, Dumbbell, Pencil, Timer, Trash2 } from 'lucide-react';
 import { useData } from '../data/DataContext';
-import { formatDate, formatNumber, loadLabel, sessionCompletedSets, validateSet } from '../lib/domain';
+import { formatDate, formatNumber, isMaxReps, loadLabel, sessionCompletedSets, validateSet } from '../lib/domain';
 import { setVolume } from '../lib/stats';
 import { clockTime, ENERGY_LABELS, sessionDurationSeconds, updateSessionFeedbackChanges } from '../lib/workout-actions';
 import type { SessionExercise, SessionFeedback, SetEntry, WorkoutSession } from '../types';
@@ -83,7 +83,7 @@ export function HistoryDetail({ session, onBack, onDirtyChange }: { session: Wor
       return <section key={exercise.id} className="history-exercise">
         <div className="section-heading"><div><h2>{exercise.snapshot.name}</h2><p className="field-hint">{exercise.snapshot.equipment} · {loadLabel(exercise.snapshot)}{exercise.snapshot.unilateral ? ' · ripetizioni per lato' : ''}</p></div></div>
         {entries.length ? <div className="history-set-list"><div className="history-set-head" aria-hidden="true"><span>Serie</span><span>kg</span><span>reps</span><span>RIR</span><span /></div>{entries.map((entry) => <div key={entry.id}>{editing === entry.id ? <EditSet key={entry.id} entry={entry} exercise={exercise} onClose={() => setEditing((current) => current === entry.id ? null : current)} onBusyChange={setEditingBusy} /> : <>
-          <button type="button" className="history-set-row" disabled={busy || editingBusy} onClick={() => void editEntry(entry.id)} aria-label={`Modifica ${exercise.snapshot.name}, serie ${entry.index + 1}: ${entry.weight} kg, ${entry.reps} ripetizioni`}><span>{entry.index + 1}</span><strong>{formatNumber(entry.weight)}</strong><strong>{entry.reps}</strong><span>{entry.rir ?? '—'}</span><Pencil size={16} /></button>
+          <button type="button" className="history-set-row" disabled={busy || editingBusy} onClick={() => void editEntry(entry.id)} aria-label={`Modifica ${exercise.snapshot.name}, serie ${entry.index + 1}${isMaxReps(exercise.target, entry.index) ? ' a MAX' : ''}: ${entry.weight} kg, ${entry.reps} ripetizioni`}><span>{entry.index + 1}{isMaxReps(exercise.target, entry.index) && <small className="history-max-label">MAX</small>}</span><strong>{formatNumber(entry.weight)}</strong><strong>{entry.reps}</strong><span>{entry.rir ?? '—'}</span><Pencil size={16} /></button>
           {exercise.snapshot.unilateral && (entry.rightReps !== null || entry.rightWeight !== null) && <p className="history-side-note">Destro: {formatNumber(entry.rightWeight ?? entry.weight)} kg × {entry.rightReps ?? entry.reps} reps</p>}
           {entry.durationMs != null && <p className="history-set-duration"><Timer size={14} aria-hidden="true" />Durata serie {clockTime(entry.durationMs / 1000)}</p>}
           {entry.note && <p className="history-set-note">{entry.note}</p>}

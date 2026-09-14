@@ -63,6 +63,14 @@
 .prescription-fields { padding: 4px 0 24px; }
 .prescription-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px 14px; }
 .prescription-grid input { font-size: 1.2rem; font-weight: 600; font-variant-numeric: tabular-nums; }
+.prescription-counts { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; grid-column: 1 / -1; }
+.max-reps-field { grid-column: 1 / -1; }
+.max-reps-heading { display: flex; align-items: center; justify-content: space-between; gap: 16px; font-size: 16px; font-weight: 600; }
+.max-reps-options { display: flex; flex-wrap: wrap; gap: 8px; max-height: 184px; overflow-y: auto; padding: 4px; margin: -4px; }
+.max-reps-option { display: flex; align-items: center; gap: 8px; min-height: 48px; padding: 8px 12px; border: 1px solid #454551; border-radius: 12px; color: var(--text-secondary); font-size: 14px; cursor: pointer; }
+.routines-page .max-reps-field input[type='checkbox'] { width: 22px; height: 22px; min-height: 22px; padding: 0; flex: 0 0 22px; accent-color: var(--accent); }
+.max-reps-option:has(:checked) { color: var(--text); border-color: var(--accent); }
+.max-reps-option:hover { background: var(--surface); }
 .add-exercise-button { width: 100%; margin-top: 20px; }
 .exercise-picker { margin: 18px 0 24px; padding: 20px 0 0; border-top: 1px solid #303039; display: grid; gap: 16px; }
 .exercise-picker-results { max-height: 350px; overflow-y: auto; overscroll-behavior: contain; scrollbar-color: #575764 #19191f; scrollbar-width: thin; }

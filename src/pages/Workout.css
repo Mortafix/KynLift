@@ -28,6 +28,7 @@ html:has(.workout-page), body:has(.workout-page) { height: 100%; overflow: hidde
 .workout-page .number-field-heading, .workout-sides-dialog .number-field-heading { justify-content: flex-start; align-items: baseline; margin-bottom: 8px; font-size: 20px; line-height: 1.15; }
 .workout-page .number-field-heading label, .workout-sides-dialog .number-field-heading label { color: var(--text); font-weight: 600; }
 .workout-page .number-unit, .workout-sides-dialog .number-unit { color: var(--text-secondary); font-weight: 400; }
+.number-max-label { flex-shrink: 0; padding: 2px 5px; border: 1px solid currentColor; border-radius: 4px; color: var(--accent); font-size: 12px; font-weight: 700; line-height: 1.2; }
 .workout-page .number-controls { margin-block: auto; }
 .workout-page .number-controls input { height: 52px; min-height: 48px; font-size: 52px; }
 .workout-page .set-rail { grid-column: 1; grid-row: 1; position: relative; min-height: 0; }

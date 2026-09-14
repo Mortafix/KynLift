@@ -33,3 +33,4 @@
   .routine-preview-exercise h2 { font-size: 20px; }
   .routine-preview-prescription { gap: 10px 14px; }
 }
+.routine-preview-max { color: var(--text-secondary); font-size: 14px; margin: 8px 0 0; }

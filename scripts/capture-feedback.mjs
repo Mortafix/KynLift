@@ -83,7 +83,7 @@ try {
       // A long rail exercises automatic centering at every supported width.
       await page.getByRole('button', { name: 'Modifica Lower body A', exact: true }).click();
       await page.getByLabel('Serie', { exact: true }).fill('12');
-      await page.getByLabel('Recupero, secondi', { exact: true }).fill('90');
+      await page.getByLabel('Recupero (s)', { exact: true }).fill('90');
       await page.getByRole('button', { name: 'Salva scheda', exact: true }).click();
       await page.getByRole('button', { name: 'Modifica Lower body A', exact: true }).waitFor();
       await home(page);
